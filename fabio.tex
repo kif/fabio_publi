@@ -3,7 +3,7 @@
 \begin{document}
 
 \title{FabIO: easy access to area X-ray detector images in Python}
-    \author[a]{Henning O.}{S\/orensen}
+    \author[a]{Henning O.}{S\orensen}
     \author[a]{Erik B.}{Knudsen}
     \author[b]{Jonhatan P.}{Wright}
 	\cauthor[b]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
@@ -68,69 +68,8 @@ This instance stores the image data, but also includes a number of methods.
 im.data now has all the pixel values in the image stored as a numpy array. 
 Often the image file contains furthermore information than just the intensities of the pixels, 
 e.g. information about how the image is stored and the instrument parameters at the time of the image acquisition.
- Header information, if available, is available in im.header, which is
- a Python dictionary: 
-
-\begin{verbatim}
-> import fabio 								# import the fabio module 
-> img = fabio.open(‘exampleimage0001.edf’) 	# Create a fabioimage instance from the file
-> img.header 								# prints all headers from the file as a python dict. 
-{'ByteOrder': 'LowByteFirst',
- 'DATE (scan begin)': 'Mon Jun 28 21:22:16 2010',
- 'DataType': 'UnsignedShort',
- 'Detector': 'frelon4m (sn=29)',
- 'Dim_1': '2048',
- 'Dim_2': '2048',
- 'ESRFAutoTime': '62.2611',
- 'ESRFBeamLine': 'id11',
- 'ESRFCurrent': '200.099',
- 'ESRFFillMode': '7/8 multibunch',
- 'ESRFRefill': '38265',
- 'Experiment': 'ma558',
- 'Fz1': '20.465713',
- 'Fz2': '20.467421',
-……
- 'zb': '22.300000',
- 'zm': '1.239060'}
-> Fz1_motor_position = img.header[‘Fz1’] 	# retrieve an individual value from the header
->
-> import pylab								# import pylab from matplotlib  
-> pylab.imshow(img.data)					# display the data-array as an image
-> pylab.show()								# 
-\end{verbatim}
-
-\subsection{FabIO methods}
-
-One the strengths of the implementation in an object oriented language as Python
-is the possibility to ship functions (or methods) togeather with data. So in
-addition to the header information and the image data, every fabioimage instance
-(returned by fabio.open) provides methods which provide information about the image – minimum, maximum, mean values, 
-methods which gives the file number, name etc. One of the most important method
-is to read data from another image into the instance, these functions are next, previous, and getframe.
-   
-
-\subsection{Examples}
-\begin{verbatim}
-> import fabio 							
-> im = fabio.open(’Quartz_0100.tif’)	# Open diffraction image file
-> im.data								# Print image data (2D numpy array)								  
-> im = im.next()						# Open next image
->  im = im.getframe(270)				# Jump to file number.
-\end{verbatim} 
-\subsection{acknowledgement}
-We acknowledge Andy G\"otz, Kenneth Evans for including the Fabio reader in the
-Fable ImageViewer.  
-Carsten Gundlach for implementation of Fabio at the beamlines i711 and i811, MAX IV and providing bug reports.
-We finaly acknowledge all people who reported bug on Fabio. 
-Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
-TotalCryst.
-
-\bibliographystyle{iucr}
-\bibliography{biblio}
-
-
-
-
+Header information, if available, is available in im.header as a Python dictionary.
+ 
 \begin{table}[h]
 \caption{\label{format}List of file formats that Fabio can read and write}
 \vspace{1mm}
@@ -157,6 +96,67 @@ EDNA\cite(edna}-XML	&	.xml	&	No	&	No	 \\%Internaly used in EDNA\cite{edna}\\
 \end{center}
 
 \end{table}
+
+\begin{verbatim}
+> import fabio 								# import the fabio module 
+> img = fabio.open(‘exampleimage0001.edf’) 	# Create a fabioimage instance from the file
+> img.header 								# prints all headers from the file as a python dict. 
+{'ByteOrder': 'LowByteFirst',
+ 'DATE (scan begin)': 'Mon Jun 28 21:22:16 2010',
+ 'DataType': 'UnsignedShort',
+ 'Detector': 'frelon4m (sn=29)',
+ 'Dim_1': '2048',
+ 'Dim_2': '2048',
+ 'ESRFAutoTime': '62.2611',
+ 'ESRFBeamLine': 'id11',
+ 'ESRFCurrent': '200.099',
+ 'ESRFFillMode': '7/8 multibunch',
+ 'ESRFRefill': '38265',
+ 'Experiment': 'ma558',
+ 'Fz1': '20.465713',
+ 'Fz2': '20.467421',
+……
+ 'zb': '22.300000',
+ 'zm': '1.239060'}
+> Fz1 = img.header[‘Fz1’]					# retrieve an individual value
+>
+> import pylab								# import pylab from matplotlib  
+> pylab.imshow(img.data)					# display as an image
+> pylab.show()								# show window
+\end{verbatim}
+
+\subsection{FabIO methods}
+
+One the strengths of the implementation in an object oriented language as Python
+is the possibility to ship functions (or methods) togeather with data. So in
+addition to the header information and the image data, every fabioimage instance
+(returned by fabio.open) provides methods which provide information about the image – minimum, maximum, mean values, 
+methods which gives the file number, name etc. One of the most important method
+is to read data from another image into the instance, these functions are next, previous, and getframe.
+   
+
+\subsection{Examples}
+\begin{verbatim}
+> import fabio 							
+> im = fabio.open(’Quartz_0100.tif’)	# Open image file
+> im.data								# Print image data								  
+> im = im.next()						# Open next image
+> im = im.getframe(270)				# Jump to file number.
+\end{verbatim} 
+\subsection{acknowledgement}
+We acknowledge Andy G\"otz, Kenneth Evans for including the Fabio reader in the
+Fable ImageViewer.  
+Carsten Gundlach for implementation of Fabio at the beamlines i711 and i811, MAX IV and providing bug reports.
+We finaly acknowledge all people who reported bug on Fabio. 
+Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
+TotalCryst.
+
+\bibliographystyle{iucr}
+\bibliography{biblio}
+
+
+
+
 
 
 \end{document}
