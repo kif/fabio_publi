@@ -1,19 +1,162 @@
-%%This is a very basic article template.
-%%There is just one section and two subsections.
-\documentclass{article}
+\documentclass{iucr}
 
 \begin{document}
 
+\title{FabIO: easy access to area X-ray detector images in Python}
+    \author[a]{Henning O.}{S\/orensen}
+    \author[a]{Erik B.}{Knudsen}
+    \author[b]{Jonhatan P.}{Wright}
+	\cauthor[b]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
+	\author[b]{Ga\"el}{Goret}
+	\author[b]{V. Armando}{Sol\'e}
+	
+    \aff[a]{Institut of chemistry, \city{Copenhagen}, \country{Denmark}}
+    \aff[b]{European Synchrotron Radiation Facility, \city{Grenoble}, \country{France}}
 
-\section{Title}
+     % Use \shortauthor to indicate an abbreviated author list for use in
+     % running heads (you will need to uncomment it).
+\maketitle
 
-\subsection{Subtitle}
+\section{Introduction}
 
-Plain text.
+One obstacle when writing programs to analyse X-ray diffraction data or other
+data collected from a two-dimensional detector is to read the raw data into the
+program, not least because the data can be stored in many different formats
+depending on the instrument used. 
+We have had a similar problems and therefore decided to develop a general module, 
+FabIO (FABle I/O), for easy reading of two-dimensional data. 
+The module has been developed as part of the FABLE (Fully Automated BeamLine 
+XXX) program suite for analysis of 3DXRD microscopy
+data\cite{3dxrd}. The module is written in object-oriented scripting language
+Python\cite{python} . Table \ref{format} shows the fairly comprehensive list of
+file formats that Fabio can currently (ver. 0.1.0) read. FitAllB\cite{fitallb}.
 
-\subsection{Another subtitle}
 
-More plain text.
+\section{FabIO python module} 
+
+\subsection{Philosophy}
+
+The basic idea was to make a python module, which would enable very straight
+forward reading of 2D diffraction  data images from any detector format
+without having to worry about the format.
+Therefore Fabio just needs a file name to open a file and make out the format. 
+The data should be stored in memory as a standard 2D numpy array\cite{numpy}.
+If the file contains image header information which should also be read and 
+stored as a standard python dictionary. 
+Furthermore there should be functions for reading the previous or next image 
+in a series of images as well as jumping to a specific file number. 
+For the user auxiliary functions should be independent of the image format.
+The software should freely available to everyone and it should be modular in 
+order to ensure the possibility for including other data formats. 
+Fabio is licensed as GNU General Public License version 3 (GPLv3) 
+and the source code is freely available on-line\cite{fabio}.
+
+
+\subsection{Implementation}
+
+Generally Fabio have been code in Python\cite{python},
+though for some image formats the python code is merely interfaced a reading 
+layer programmed in standard C (sometimes using cython\cite{cython}.
+Fabio makes use of the numerical python module numpy\cite{numpy} and there are
+two optional python modules which can be used Lxml, for reading XML files
+used in EDNA\cite{edna} and Python Image Library
+\cite{pil}, for converting the image to be visualized in graphical user
+interfaces based on the Python Tkinter library\cite{???} or simply with matplotlib\cite{matplotlib}. 
+In the Python shell the FabIO module must be imported before reading an image of any of the supported formats, see Table \ref{format},  
+this creates an instance of the python class {\em fabioimage} in this example called {\em img}.
+This instance stores the image data, but also includes a number of methods.
+im.data now has all the pixel values in the image stored as a numpy array. 
+Often the image file contains furthermore information than just the intensities of the pixels, 
+e.g. information about how the image is stored and the instrument parameters at the time of the image acquisition.
+ Header information, if available, is available in im.header, which is
+ a Python dictionary: 
+
+\begin{verbatim}
+> import fabio 								# import the fabio module 
+> img = fabio.open(‘exampleimage0001.edf’) 	# Create a fabioimage instance from the file
+> img.header 								# prints all headers from the file as a python dict. 
+{'ByteOrder': 'LowByteFirst',
+ 'DATE (scan begin)': 'Mon Jun 28 21:22:16 2010',
+ 'DataType': 'UnsignedShort',
+ 'Detector': 'frelon4m (sn=29)',
+ 'Dim_1': '2048',
+ 'Dim_2': '2048',
+ 'ESRFAutoTime': '62.2611',
+ 'ESRFBeamLine': 'id11',
+ 'ESRFCurrent': '200.099',
+ 'ESRFFillMode': '7/8 multibunch',
+ 'ESRFRefill': '38265',
+ 'Experiment': 'ma558',
+ 'Fz1': '20.465713',
+ 'Fz2': '20.467421',
+……
+ 'zb': '22.300000',
+ 'zm': '1.239060'}
+> Fz1_motor_position = img.header[‘Fz1’] 	# retrieve an individual value from the header
+>
+> import pylab								# import pylab from matplotlib  
+> pylab.imshow(img.data)					# display the data-array as an image
+> pylab.show()								# 
+\end{verbatim}
+
+\subsection{FabIO methods}
+
+One the strengths of the implementation in an object oriented language as Python
+is the possibility to ship functions (or methods) togeather with data. So in
+addition to the header information and the image data, every fabioimage instance
+(returned by fabio.open) provides methods which provide information about the image – minimum, maximum, mean values, 
+methods which gives the file number, name etc. One of the most important method
+is to read data from another image into the instance, these functions are next, previous, and getframe.
+   
+
+\subsection{Examples}
+\begin{verbatim}
+> import fabio 							
+> im = fabio.open(’Quartz_0100.tif’)	# Open diffraction image file
+> im.data								# Print image data (2D numpy array)								  
+> im = im.next()						# Open next image
+>  im = im.getframe(270)				# Jump to file number.
+\end{verbatim} 
+\subsection{acknowledgement}
+We acknowledge Andy G\"otz, Kenneth Evans for including the Fabio reader in the
+Fable ImageViewer.  
+Carsten Gundlach for implementation of Fabio at the beamlines i711 and i811, MAX IV and providing bug reports.
+We finaly acknowledge all people who reported bug on Fabio. 
+Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
+TotalCryst.
+
+\bibliographystyle{iucr}
+\bibliography{biblio}
+
+
+
+
+\begin{table}[h]
+\caption{\label{format}List of file formats that Fabio can read and write}
+\vspace{1mm}
+\begin{center}
+\begin{tabular}{lccc}
+Name 			& File extension & Multi-image	& Write\\% & Notes\\
+\hline
+ESRF data format	&	.edf	&	Yes	&	Yes		\\%Several bit formats\\
+Nonius 	KappaCCD	&	.kccd	&	No 	&	No		\\%Multiples frames are merged are reading. now bruker\\
+Bruker formats		&	.sfrm	&	?	&	?		\\%TODO Complete\\
+Oxford Diffraction 	&	.oxd	&	No	&	Yes		\\%now Agilent\\
+ADSC Quantum		&	.adsc	&	No?	&	?		\\%Check\\	
+General Electric	&	-		&	Yes	&	No?		\\%massivly muflit-frame\\
+Dectris Pilatus		&	.tif	&	No?	&	No?		\\%Tiff based format\\
+MarCCD/Mar165		&	.mccd	&	No?	&	No?		\\%Tiff based format\\
+Mar345				&	-		&	No	&	Yes		\\%Compressed format\\
+Hamamatsu HiPiC		&	.tif	&	No?	&	No?	 	\\%Tiff based format\\
+CIF Binary Files	&	.cbf	&	No?	& 	Yes		\\%Used also by Pilatus\\
+DM3					&	.dm3	&	?	&	?		\\%?\\
+PNM					&	.pnm	&	?	&	?		\\%?\\
+TIFF				&	.tif	&	?	&	?		\\%can be compressed or not\\
+EDNA\cite(edna}-XML	&	.xml	&	No	&	No	 \\%Internaly used in EDNA\cite{edna}\\
+\end{tabular}
+\end{center}
+
+\end{table}
 
 
 \end{document}
