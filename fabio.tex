@@ -43,7 +43,7 @@ The module is written in an object-oriented scripting language Python
 Table \ref{format} shows the list of file formats that FabIO
 can currently (ver. 0.1.0) read.
 The software is already used in a number of applications including
-FitAllB \cite{fitallb}, the FABLE graphical interface \cite{fable}
+FitAllB \cite{fitallb}, the FABLE graphical interface \cite{fable}, EDNA\cite{edna}
 and the fast azimuthal integration library, pyFAI \cite{pyfai}.
 
 
@@ -87,21 +87,22 @@ matplotlib\cite{matplotlib} and an ipython shell \cite{ipython}, which is
 very useful for developing algorithms.
 Reading and writing of the various TIFF \cite{tiff} formats is based on the
 TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
-In the Python shell the FabIO module must be imported prior to reading an
+In the Python shell the {\em fabio} module must be imported prior to reading an
 image of one of the supported formats (see Table \ref{format}).
-The fabio.open function creates an instance of the python class {\em fabioimage},
-in this example called {\em img}.
-This instance stores the image data in img.data as a numpy array
+The {\em fabio.open} function creates an instance of the python class {\em fabioimage},
+from the name of a file.
+This instance stores the image data in {\em img.data} as a numpy array
 Often the image file contains furthermore information than just
 the intensities of the pixels, e.g. information about how the image is
 stored and the instrument parameters at the time of the image acquisition.
-Header information, if available, is available in im.header as a Python
+Header information, if available, is available in {\em img.header} as a Python
 dictionary.
 
-Currently, fabio does not attempt to interpret or translate metadata which
+Currently, FabIO does not attempt to interpret or translate metadata which
 is found in the headers of various frame formats, but merely presents the
-information as a string.
-
+information as a string. Neverthless FabIO is capable of converting one
+dataformat into another, taking care of the dataformat; for example float array
+are converted to integer array if the output format only accepts integers.
 
 
 \subsection{FabIO methods}
@@ -119,22 +120,20 @@ getframe.
 \section{Installation}
 
 As any Python module, FabIO can be installed from its sources available on sourceforge\cite{fabio}
-but we advice to use the package installer provided for the most common platforms: Windows, MacOSX and Linux.
+but we advice to use the package installer provided for the most common
+platforms: Windows, MacOSX and Linux. Moreover FabIO is part of common linux
+distribution Ubuntu (since 11.10) and Debian7.
 
 \subsection{Examples}
 
 Opening an image:
 
 \begin{verbatim}
-import fabio
-# Open image file
-im0 = fabio.open('Quartz_0100.tif')
-# check a pixel value
-print im0.data[1024,1024]
-# Open next image
-im1 = im.next()
-# Jump to file number
-im270 = im1.getframe(270)
+import fabio     
+im0 = fabio.open('Quartz_0100.tif') # Open image file
+print(im0.data[1024,1024]) # check a pixel value
+im1 = im0.next() # Open next image
+im270 = im1.getframe(270) # Jump to file number
 \end{verbatim}
 
 Normalising the intensity to a value in the header
@@ -156,10 +155,9 @@ img.write('normed_0001.edf')
 Interactive viewing
 
 \begin{verbatim}
-#
-> import pylab								# import pylab from matplotlib
-> pylab.imshow(img.data)					# display as an image
-> pylab.show()								# show window
+import pylab								# import pylab from matplotlib
+pylab.imshow(img.data)					# display as an image
+pylab.show()								# show window
 \end{verbatim}
 
 %\begin{verbatim}
@@ -200,9 +198,20 @@ Interactive viewing
 %\end{verbatim}
 
 
-\section{future and perspectives}
+\section{Future and perspectives}
 
-what about HDF5 ? what about python3
+Hierachical data format version 5 (HDF5\cite{hdf5}) is a data format which is
+getting popular in the field of X-rays data storage. Mainly processed
+data are stored in this format today but new detector should provide native
+output in HDF5. Then, FabIO will interface those data using the python binding 
+to HDF5 (h5py\cite{h5py}) for providing data via the same interface as of today.
+
+Meanwhile FabIO will be upgraded to Python3; this change of version will affect
+a lot of the internal code of FabIO as all string handling and file handling
+changed between current Python2 and the new Python3. This change is already
+ongoing as many part of native code in C was re-implemented in
+Cython\cite{cython} to smoothen the transition as Cython is compatible with
+Python3.
 
 \subsection{Conclusion}
 
@@ -211,15 +220,15 @@ python computer language.
 It has originally developed for X-ray diffraction but now gives
 an easy way for scientists to access and manipulate
 their data from a wide range of range of 2D detectors.
-We welcome contributions to futher improve the code and hope to add
+We welcome contributions to fruther improve the code and hope to add
 further file formats in the future as well as port the existing code base to the emerging python3.
 
 
 \subsection{acknowledgement}
 We acknowledge Andy G\"otz and Kenneth Evans for extensive testing when including
 the FabIO reader in the Fable ImageViewer.
-We also thank V. Armando Sol\'e for assistance with his TiffFile reader and Carsten Gundlach
-for implementation of FabIO at the beamlines i711 and i811, MAX IV and providing bug reports.
+We also thank V. Armando Sol\'e for assistance with his TiffIO reader and
+Carsten Gundlach for implementation of FabIO at the beamlines i711 and i811, MAX IV and providing bug reports.
 We finally acknowledge our colleagues who have reported bugs and helped to
 improve FabIO.
 Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
@@ -230,7 +239,7 @@ TotalCryst.
 
 
 \appendix
-\section{Various format}
+\section{Various detector format supported by FabIO.}
 % put in appendix it can be full width
 \onecolumn
 \begin{table}[h]
@@ -241,27 +250,25 @@ TotalCryst.
 \begin{tabular}{llccc}
 Python Module   & Detector		& Typical extension & Multi-image	& Write\\% & Notes\\
 \hline % alphabetical order - all formats are equal :-)
-adscimage   &   ADSC Quantum		&	.img	&	No	&	Yes		\\%Check\\
-brukerimage &   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
-DM3			&	.dm3	&	?	&	?		\\%?\\
-edfimage    &   ESRF data format	&	.edf	&	Yes	&	Yes		\\%Several bit formats\\
-EDNA\cite(edna}-XML	&	.xml	&	No	&	No	 \\%Internaly used in EDNA\cite{edna}\\
-cbfimage    &   CIF Binary Files	&	.cbf	&	No?	& 	Yes		\\%Used also by Pilatus \\
-kcdimage    &   Nonius 	KappaCCD	&	.kccd	&	No 	&	No		\\%Multiples frames are merged are reading. now bruker\\
-fit2dmaskimage \cite{fit2d} &   .msk    &   No  &   Yes  \\
-fit2dspreadsheetimage \cite{fit2d}&   .spr    &   No  &   Yes    \\
-GEimage     &   General Electric	&	-		&	Yes	&	No?		\\%massivly multi-frame\\
+adsc	   &   ADSC Quantum		&	.img	&	No	&	Yes		\\%Check\\
+brukeri		&   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
+DM3			&						&	.dm3	&	?	&	?		\\%?\\
+edf		    &   ESRF data format	&	.edf	&	Yes	&	Yes		\\%Several bit formats\\
+EDNA\cite(edna}-XML		&	.xml	&	No		&	No	 \\%Internaly used in EDNA\cite{edna}\\
+cbf		    &   CIF Binary Files	&	.cbf	&	No?	& 	Yes		\\%Used also by Pilatus \\
+kcd	    	&   Nonius 	KappaCCD	&	.kccd	&	No 	&	No		\\%Multiples frames are merged are reading. now bruker\\
+fit2dmask \cite{fit2d} 		&   .msk    &   No  &   Yes  \\
+fit2dspreadsheet \cite{fit2d}	&   .spr    &   No  &   Yes    \\
+GE		    &   General Electric	&	-		&	Yes	&	No?		\\%massivly multi-frame\\
 HiPiC       & Hamamatsu CCDs 		&	.tif	&	No	&	No?	 	\\%Tiff based format\\
-marccdimage &   MarCCD/Mar165		&	.mccd	&	No	&	No?		\\%Tiff based format\\
-mar345image &   Mar345				&	.mar3450		&	No	&	Yes		\\%Compressed format\\
-OXDimage    &   Oxford Diffraction 	&	.img	&	No	&	Yes		\\%now Agilent\\
-pilatusimage    & Dectris Pilatus		&	.tif	&	No?	&	No?		\\%Tiff based format\\
+marccd		&   MarCCD/Mar165		&	.mccd	&	No	&	No?		\\%Tiff based format\\
+mar345		&   Mar345				&	.mar3450		&	No	&	Yes		\\%Compressed format\\
+OXD		    &   Oxford Diffraction 	&	.img	&	No	&	Yes		\\%now Agilent\\
+pilatus	    & Dectris Pilatus Tiff		&	.tif	&	No?	&	No?		\\%Tiff based  format\\
 PNM			&	.pnm	&	No	&	?		\\% pnm is a unix image format
 TIFF		&	.tif	&	No	&	?		\\%can be compressed or not\\
 \end{tabular}
 \end{center}
 \end{table}
-
-
 
 \end{document}
