@@ -51,7 +51,7 @@ and the fast azimuthal integration library, pyFAI \cite{pyfai}.
 
 \subsection{Philosophy}
 
-The intention was to create a python module which would enable easy reading
+The intention behind this development was to create a python module which would enable easy reading
 of 2D data images, from any detector, without having to worry about
 the file format.
 Therefore FabIO just needs a file name to open a file and it determines the
@@ -59,17 +59,16 @@ file format automatically and deals with gzip \cite{gzip} and bzip2
 \cite{bzip2} compression transparently.
 An object is returned which stores the image data in memory as a 2D
 numpy array \cite{numpy}.
-If the file contains header information, these are also read and stored
+If the file contains header information (metadata), these are also read and stored
 as strings in a python dictionary.
 Methods are provided for reading the previous or next image in
 a series of images as well as jumping to a specific file number.
 For the user, these auxiliary methods are intended to be independent of
 the image format (as far as is reasonably possible).
-The software is be freely available to everyone and it tries to be
-modular in order to ensure the possibility for including other data formats
-in the future.
-FabIO is licensed as GNU General Public License version 3 (GPLv3) and the
-source code is freely available on-line \cite{fabio}.
+The software is very modular, this allow to includes new classes for handeling 
+other data formats quite easily. 
+FabIO and its source-code are freely available to everyone on-line \cite{fabio}, 
+licensed as GNU General Public License version 3 (GPLv3). 
 
 \subsection{Implementation}
 
