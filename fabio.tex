@@ -43,7 +43,7 @@ The module is written in an object-oriented scripting language Python
 Table \ref{format} shows the list of file formats that FabIO
 can currently (ver. 0.1.0) read.
 The software is already used in a number of applications including
-FitAllB \cite{fitallb}, the FABLE graphical interface \cite{fable}, EDNA\cite{edna}
+FitAllB \cite{fitallb}, the FABLE graphical interface \cite{fable}, EDNA \cite{edna}
 and the fast azimuthal integration library, pyFAI \cite{pyfai}.
 
 
@@ -71,21 +71,16 @@ FabIO and its source-code are freely available to everyone on-line \cite{fabio},
 licensed as GNU General Public License version 3 (GPLv3). 
 
 \subsection{Implementation}
+The main language used in the development of FabIO is Python \cite{python}. However, for some image formats requiering time consuming algorithms, the Python code has been interfaced with a standard C layer (sometimes generated using cython \cite{cython}). 
 
-Generally FabIO have been code in Python\cite{python},
-though for some image formats the python code is merely interfaced a reading
-layer programmed in standard C (sometimes using cython\cite{cython}.
-FabIO makes use of the numerical python module numpy\cite{numpy} and there are
-two optional python modules which can be used Lxml, for reading XML files
-used in EDNA\cite{edna} and Python Image Library, PIL\cite{pil}.
-The PIL representation is useful for displaying images in a GUI based on
-the Python Tkinter library\cite{tkinter} and also for access
-to the many image processing operations in that library.
-Images can displayed in a convenient interactive manner using
-matplotlib\cite{matplotlib} and an ipython shell \cite{ipython}, which is
-very useful for developing algorithms.
-Reading and writing of the various TIFF \cite{tiff} formats is based on the
+Consequence of a constant concern for the speed of calculation, FabIO makes use of the numerical python module NumPy \cite{numpy}. Two other python modules can be optionaly used. 
+An XML toolkit called, Lxml, for reading XML files used in EDNA \cite{edna}, and the Python Image Library (PIL \cite{pil}) which contains a useful representation for the display of images in GUIs based on the Python Tkinter library \cite{tkinter} but also for access to the many image processing operations in that library.
+
+FabIO do not integrate any visualisation tool, but, images can be displayed very conveniently using the combination of the library matplotlib \cite{matplotlib} with the interactive python shell IPython \cite{ipython}.
+ 
+Reading and writing procedures of the various TIFF \cite{tiff} formats are based on the
 TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
+
 In the Python shell the {\em fabio} module must be imported prior to reading an
 image of one of the supported formats (see Table \ref{format}).
 The {\em fabio.open} function creates an instance of the python class {\em fabioimage},
