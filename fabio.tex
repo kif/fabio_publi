@@ -29,8 +29,8 @@ depending on the instrument used.
 To overcome this problem we decided to develop a general module,
 FabIO (FABle I/O), to handle reading and writing of two-dimensional
 data.
-The codebase was initiated by merging parts of our fabian imageviewer
-\cite{fabian} and ImageD11 \cite{ImageD11} peaksearch programs and has
+The code-base was initiated by merging parts of our fabian imageviewer
+\cite{fabian} and ImageD11 \cite{ImageD11} peak-search programs and has
 been developed since 2007 as part of the FABLE \cite{fable} program suite
 for analysis of 3DXRD microscopy data \cite{3dxrd}.
 While getting integrated in many scientific programs like FitAllB
@@ -48,7 +48,7 @@ FabIO can currently (ver. 0.1.0) read.
 \section{FabIO Python module}
 
 Python \cite{python} is a scripting language very popular among scientists but
-it allows writting well structured application and libraries. FabIO is is
+it allows writing well structured application and libraries. FabIO is is
 written in an object-oriented style (with classes) and has a comprehensive test suite
 used to prevent regression during the development.
 
@@ -76,17 +76,17 @@ licensed as GNU General Public License version 3 (GPLv3).
 
 \subsection{Implementation}
 
-Generally FabIO have been code in Python\cite{python},
+Generally FabIO have been code in Python \cite{python},
 though for some image formats the python code is merely interfaced a reading
-layer programmed in standard C (sometimes using cython\cite{cython}.
-FabIO makes use of the numerical python module numpy\cite{numpy} and there are
+layer programmed in standard C (sometimes using cython \cite{cython}.
+FabIO makes use of the numerical python module numpy \cite{numpy} and there are
 two optional python modules which can be used Lxml, for reading XML files
-used in EDNA\cite{edna} and Python Image Library, PIL\cite{pil}.
+used in EDNA \cite{edna} and Python Image Library, PIL \cite{pil}.
 The PIL representation is useful for displaying images in a GUI based on
-the Python Tkinter library\cite{tkinter} and also for access
+the Python Tkinter library and also for access
 to the many image processing operations in that library.
 Images can displayed in a convenient interactive manner using
-matplotlib\cite{matplotlib} and an ipython shell \cite{ipython}, which is
+matplotlib \cite{matplotlib} and an ipython shell \cite{ipython}, which is
 very useful for developing algorithms.
 Reading and writing of the various TIFF \cite{tiff} formats is based on the
 TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
@@ -203,28 +203,35 @@ pylab.show()								# show window
 
 \section{Future and perspectives}
 
-Hierachical data format version 5 (HDF5\cite{hdf5}) is a data format which is
-getting popular in the field of X-rays data storage. Mainly processed
-data are stored in this format today but new detector should provide native
-output in HDF5. Then, FabIO will interface those data using the python binding 
-to HDF5 (h5py\cite{h5py}) for providing data via the same interface as of today.
+Hierarchical data format version 5 (HDF5 \cite{hdf5}) is a data format which is
+getting popular in the field of X-rays data storage. For now, mainly processed
+or curated data are stored in this format but new detector may provide native
+output in HDF5 (the detector Eiger from Dectris is planed to do so). As the
+internal structure of HDF5 is very versatile, FabIO will expose specifically
+detector images (data and headers) when the HDF structure will be known.
+Fabio does not aim at providing generic HDF5 access as good
+Python binding to HDF5 already exists: H5Py \cite{h5py}. 
+{\em NotaJK: I do like finishing this paragraph with a negative sentence} 
 
 Meanwhile FabIO will be upgraded to Python3; this change of version will affect
 a lot of the internal code of FabIO as all string handling and file handling
 changed between current Python2 and the new Python3. This change is already
 ongoing as many part of native code in C was re-implemented in
-Cython\cite{cython} to smoothen the transition as Cython is compatible with
-Python3.
+Cython \cite{cython} to smooth the transition as Cython is compatible with
+Python3. Another issue is the absence of an offical PIL port to Python3, so PIL
+has already been made an optional dependency and its features could be
+reimplemented using other libraries. 
 
 \subsection{Conclusion}
 
 FabIO gives an easy way to read and write 2D images when using the
-python computer language.
+Python computer language.
 It has originally developed for X-ray diffraction but now gives
 an easy way for scientists to access and manipulate
-their data from a wide range of range of 2D detectors.
-We welcome contributions to fruther improve the code and hope to add
-further file formats in the future as well as port the existing code base to the emerging python3.
+their data from a wide range of 2D detectors.
+We welcome contributions to further improve the code and hope to add
+further file formats in the future as well as port the existing code base 
+to the emerging Python3.
 
 
 \subsection{acknowledgement}
@@ -257,7 +264,7 @@ adsc	   &   ADSC Quantum		&	.img	&	No	&	Yes		\\%Check\\
 brukeri		&   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
 DM3			&						&	.dm3	&	?	&	?		\\%?\\
 edf		    &   ESRF data format	&	.edf	&	Yes	&	Yes		\\%Several bit formats\\
-EDNA\cite(edna}-XML		&	.xml	&	No		&	No	 \\%Internaly used in EDNA\cite{edna}\\
+EDNA-XML \cite(edna}	&	.xml	&	No		&	No	 \\%Internaly used in EDNA\cite{edna}\\
 cbf		    &   CIF Binary Files	&	.cbf	&	No?	& 	Yes		\\%Used also by Pilatus \\
 kcd	    	&   Nonius 	KappaCCD	&	.kccd	&	No 	&	No		\\%Multiples frames are merged are reading. now bruker\\
 fit2dmask \cite{fit2d} 		&   .msk    &   No  &   Yes  \\
