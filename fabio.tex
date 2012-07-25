@@ -96,20 +96,23 @@ image-processing operations not re-implemented in FabIO.
 % FabIO do not integrate any visualisation tool, but, images can be displayed very
 % conveniently using the combination of the library matplotlib \cite{matplotlib} with the interactive python shell IPython \cite{ipython}. 
 % 
-Images can be displayed in a convenient interactive manner using
-matplotlib \cite{matplotlib} and an ipython shell \cite{ipython}, which is also 
-very useful for developing data analysiss algorithms.
+Images can also be displayed in a convenient interactive manner using
+matplotlib \cite{matplotlib} and an ipython shell \cite{ipython}, which is
+mainly used for developing data analysis algorithms.
 Reading and writing procedure of the various TIFF \cite{tiff} formats is based
 on the TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
+
 In the Python shell the {\em fabio} module must be imported prior to reading an
 image of one of the supported formats (see Table \ref{format}).
 The {\em fabio.open} function creates an instance of the python class {\em fabioimage},
 from the name of a file. This instance stores the image data in {\em img.data}
-as a numpy array. Often the image file contains furthermore information than
+as a 2D numpy array. Often the image file contains furthermore information than
 just the intensities of the pixels, e.g. information about how the image is
-stored and the instrument parameters at the time of the image acquisition.
-Header information, if available, is available in {\em img.header} as a Python
-dictionary.
+stored and the instrument parameters at the time of the image acquisition which
+are called metadata and usualy stored in the file header.
+Header information, are available in {\em img.header} as a Python
+dictionary where keys are python string, values being usually strings or
+numeric.
 
 Currently, FabIO does not attempt to interpret or translate metadata which
 is found in the headers of various frame formats, but merely presents the
