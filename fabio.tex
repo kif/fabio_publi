@@ -107,7 +107,7 @@ mainly used for developing data analysis algorithms.
 Reading and writing procedure of the various TIFF \cite{tiff} formats is based
 on the TiFFIO code from PyMCA \cite{pymca}.
 
-In the Python shell the {\em fabio} module must be imported prior to reading an
+In the Python shell, the {\em fabio} module must be imported prior to reading an
 image of one of the supported formats (see Table \ref{format}).
 The {\em fabio.open} function creates an instance of the Python class {\em fabioimage},
 from the name of a file. This instance, named {\em img} hereafter, stores the
@@ -117,7 +117,7 @@ information about how the image is stored and the instrument parameters at the
 time of the image acquisition which  are called metadata and usually stored in
 the file header.
 Header information, are available in {\em img.header} as a Python
-dictionary where keys are python string, values being usually strings or
+dictionary where keys are Python String, values being usually strings or
 numeric values.
 
 Currently, FabIO does not attempt to interpret or translate metadata which
@@ -138,13 +138,13 @@ instance (returned by {\em fabio.open}) has methods inherited from fabioimage
 which provide information about the image minimum, maximum and mean values.
 There are methods which gives the file number, name etc. One of the most
 important methods which actually changes for certain formats  is get next image
-in a sequence; these functions are {\em next}, {\em previous}, and {\em
-getframe}. Of course the behavour of such methods varies depending on the
-image format: if it is single-framed (like mar345),  {\em next} will
-return the image in next file. On multi-frame format (like GE), {\em next} will return the
-next frame within the same file. For format wich are possibly multi-framed like
-EDF, the behavour depends on the actual number of frames per file (accessible
-via the {\em nframes}).
+in a sequence; these methods are {\em .next()}, {\em .previous()}, and {\em
+.getframe(n)}. Of course the behaviour of such methods varies depending on the
+image format: if it is single-framed (like mar345),  {\em .next()} will
+return the image in next file. On multi-frame format (like GE), {\em .next()} will
+return the next frame within the same file. For format wich are possibly multi-framed like
+EDF, the behaviour depends on the actual number of frames per file (accessible
+via the {\em .nframes} property).
 
 
 \section{Installation}
@@ -186,9 +186,9 @@ img.write('normed_0001.edf')
 Interactive viewing with matplotlib:
 
 \begin{verbatim}
-import pylab								# import pylab from matplotlib
-pylab.imshow(img.data)					# display as an image
-pylab.show()								# show window
+import pylab           # pylab is part of matplotlib
+pylab.imshow(img.data) # display as an image
+pylab.show()           # show GUI window
 \end{verbatim}
 
 %\begin{verbatim}
@@ -231,15 +231,14 @@ pylab.show()								# show window
 
 \section{Future and perspectives}
 
-Hierarchical data format version 5 (HDF5 \cite{hdf5}) is a data format which is
+Hierarchical data format version 5 \cite{hdf5} is a data format which is
 getting popular in the field of X-rays data storage. For now, mainly processed
 or curated data are stored in this format but new detector may provide native
-output in HDF5 (the detector Eiger from Dectris is planed to do so). As the
+output in HDF5 (i.e. the detector Eiger from Dectris is planed to do so). As the
 internal structure of HDF5 is very versatile, FabIO will expose specifically
-detector images (data and headers) when the HDF structure will be known.
-Fabio does not aim at providing generic HDF5 access as good
-Python binding to HDF5 already exists: H5Py \cite{h5py}. 
-{\em NotaJK: I do like finishing this paragraph with a negative sentence} 
+detector images (data and headers) when the internal structure of such files
+will be known. H5Py \cite{h5py}, which provides good HDF5 Python binding, is likely to
+be used by FabIO for interfacing such files. 
 
 Meanwhile FabIO will be upgraded to Python3; this change of version will affect
 a lot of the internal code of FabIO as all string handling and file handling
@@ -254,7 +253,7 @@ reimplemented using other libraries.
 
 FabIO gives an easy way to read and write 2D images when using the
 Python computer language.
-It has originally developed for X-ray diffraction but now gives
+It was originally developed for X-ray diffraction but now gives
 an easy way for scientists to access and manipulate
 their data from a wide range of 2D X-ray detectors.
 We welcome contributions to further improve the code and hope to add
