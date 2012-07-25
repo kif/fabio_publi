@@ -8,9 +8,9 @@
     \author[a]{Henning O.}{S$\o$rensen}
     \author[b]{Erik B.}{Knudsen}
     \author[c]{Jonathan P.}{Wright}
-	\cauthor[c]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
 	\author[c]{Ga\"el}{Goret}
-%	\author[c]{V. Armando}{Sol\'e}
+	\cauthor[c]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
+% swapped JK & GG to prevent line-jump (cesure) 
     \aff[a]{Nano-Science Center, Department of Chemistry, University of Copenhagen,
             Universitetsparken 5, \city{Copenhagen}, \country{Denmark} }
     \aff[b]{Department of Physics, Technical University of Denmark,
@@ -49,46 +49,51 @@ FabIO can currently (ver. 0.1.0) read.
 
 Python \cite{python} is a scripting language very popular among scientists
 which also allows writing well structured application and libraries.
-FabIO is written in an object-oriented style (with classes) and features a
-comprehensive test suite preventing regression during the development; as
-development is done in a collaborative and decentralized way.
 
 \subsection{Philosophy}
 
 The intention behind this development was to create a Python module which would
-enable easy reading of 2D data images, from any detector, without having to worry about
-the file format.
+enable easy reading of 2D data images, from any detector; without having to
+worry about the file format.
 Therefore FabIO just needs a file name to open a file and it determines the
 file format automatically and deals with gzip \cite{gzip} and bzip2
 \cite{bzip2} compression transparently.
 An object is returned, which stores the image
-{\em data} in memory as a 2D numpy array \cite{numpy} and the metadata,
+{\em data} in memory as a 2D NumPy array \cite{numpy} and the metadata,
 called {\em header}, in a python dictionary. Beside the
 {\em data} and {\em header} properties, some methods are provided for reading
 the {\em previous} or {\em next} image in a series of images as well as jumping
 to a specific file number.
 For the user, these auxiliary methods are intended to be independent of
 the image format (as far as is reasonably possible).
-The software is very modular, this allow to includes new classes for handling 
-other data formats quite easily. 
+
+FabIO is written in an object-oriented style (with classes) but aims at being
+used in a scripting environment: special care has been set on the ease of
+access, especially for scientists with limited knowledge in programming. So
+no object-oriented programming is needed to get full benefits of
+the library. 
+As the development is done in a collaborative and decentralized way; a
+comprehensive test suite has been added to prevent any regression during the
+development. The software being very modular, allows to include new
+classes for handling other data formats quite easily.
 FabIO and its source-code are freely available to everyone on-line \cite{fabio}, 
-licensed as GNU General Public License version 3 (GPLv3) and available directly
-from popular linux distribution like Debian and Ubuntu.
+licensed under the GNU General Public License version 3 (GPLv3) and available
+directly from popular Linux distribution like Debian and Ubuntu.
 
 \subsection{Implementation}
 The main language used in the development of FabIO is Python \cite{python};
 however, some image formats are compressed which require
 compression algorithms for reading and writing data. When such algorithm cannot
-be implemented efficiently using NumPy, Python nativee modules were writen: this
-native code is standard C (sometimes generated using cython
+be implemented efficiently using NumPy, we used Python native modules, i.e.
+standard C code callable from Python (sometimes generated using Cython
 \cite{cython}) and compiled specificaly for the given architecture which
-offering excellent performances.
+offers excellent performances.
 % Generally FabIO have been code in Python \cite{python},
 % though for some image formats the python code is merely interfaced a reading
 % layer programmed in standard C (sometimes using cython \cite{cython}.
-Beside NumPy \cite{numpy} which is a strong dependency, two optional python
+Beside NumPy which is a strong dependency, two optional python
 modules can be used in FabIO, namely Lxml, for reading XML files used in EDNA
-\cite{edna} and the Python Image Library, PIL \cite{pil}.
+and the Python Image Library, PIL \cite{pil}.
 The PIL module provides useful feature for the display of images and many
 image-processing operations not re-implemented in FabIO.
 % The PIL representation is useful for displaying images in a GUI based on the Python Tkinter library and also for access
@@ -97,28 +102,30 @@ image-processing operations not re-implemented in FabIO.
 % conveniently using the combination of the library matplotlib \cite{matplotlib} with the interactive python shell IPython \cite{ipython}. 
 % 
 Images can also be displayed in a convenient interactive manner using
-matplotlib \cite{matplotlib} and an ipython shell \cite{ipython}, which is
+matplotlib \cite{matplotlib} and an IPython shell \cite{ipython}, which is
 mainly used for developing data analysis algorithms.
 Reading and writing procedure of the various TIFF \cite{tiff} formats is based
-on the TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
+on the TiFFIO code from PyMCA \cite{pymca}.
 
 In the Python shell the {\em fabio} module must be imported prior to reading an
 image of one of the supported formats (see Table \ref{format}).
-The {\em fabio.open} function creates an instance of the python class {\em fabioimage},
-from the name of a file. This instance stores the image data in {\em img.data}
-as a 2D numpy array. Often the image file contains furthermore information than
-just the intensities of the pixels, e.g. information about how the image is
-stored and the instrument parameters at the time of the image acquisition which
-are called metadata and usualy stored in the file header.
+The {\em fabio.open} function creates an instance of the Python class {\em fabioimage},
+from the name of a file. This instance, named {\em img} hereafter, stores the
+image data in {\em img.data} as a 2D NumPy array. Often the image file contains
+furthermore information than just the intensities of the pixels, e.g.
+information about how the image is stored and the instrument parameters at the
+time of the image acquisition which  are called metadata and usually stored in
+the file header.
 Header information, are available in {\em img.header} as a Python
 dictionary where keys are python string, values being usually strings or
-numeric.
+numeric values.
 
 Currently, FabIO does not attempt to interpret or translate metadata which
 is found in the headers of various frame formats, but merely presents the
-information as a string. Neverthless FabIO is capable of converting one
-dataformat into another, taking care of the dataformat; for example float array
-are converted to integer array if the output format only accepts integers.
+information as a string. Nevertheless FabIO is capable of converting one
+data-format into another, taking care of the numerical specificities: 
+for example float array are converted to integer array if the output format only
+accepts integers.
 
 
 \subsection{FabIO methods}
@@ -126,19 +133,27 @@ are converted to integer array if the output format only accepts integers.
 One the strengths of the implementation in an object oriented language as Python
 is the possibility to combine functions (or methods) together with data which
 are appropriate for specific formats.
-In addition to the header information and image data, every fabioimage instance
-(returned by fabio.open) provides methods which provide information about the image minimum, maximum and mean values.
-There are methods which gives the file number, name etc. One of the most important methods which  actually changes for certain formats
-is get next image in a sequence; these functions are next, previous, and
-getframe.
+In addition to the header information and image data, every {\em fabioimage}
+instance (returned by {\em fabio.open}) has methods inherited from fabioimage 
+which provide information about the image minimum, maximum and mean values.
+There are methods which gives the file number, name etc. One of the most
+important methods which actually changes for certain formats  is get next image
+in a sequence; these functions are {\em next}, {\em previous}, and {\em
+getframe}. Of course the behavour of such methods varies depending on the
+image format: if it is single-framed (like mar345),  {\em next} will
+return the image in next file. On multi-frame format (like GE), {\em next} will return the
+next frame within the same file. For format wich are possibly multi-framed like
+EDF, the behavour depends on the actual number of frames per file (accessible
+via the {\em nframes}).
 
 
 \section{Installation}
 
 As any Python module, FabIO can be installed from its sources available on sourceforge\cite{fabio}
-but we advice to use the package installer provided for the most common
-platforms: Windows, MacOSX and Linux. Moreover FabIO is part of common linux
-distribution Ubuntu (since 11.10) and Debian7.
+but we advice to use packages provided for the most common
+platforms on sourceforge: Windows, MacOSX and Linux. Moreover FabIO is part of
+common Linux distribution Ubuntu (since 11.10) and Debian7 where the package is named
+{\em python-fabio} and can be install via {\em # apt-get install python-fabio}.
 
 \subsection{Examples}
 
@@ -152,11 +167,11 @@ im1 = im0.next() # Open next image
 im270 = im1.getframe(270) # Jump to file number
 \end{verbatim}
 
-Normalising the intensity to a value in the header
+Normalising the intensity to a value in the header:
 
 \begin{verbatim}
 img = fabio.open('exampleimage0001.edf')
-print img.header
+print(img.header)
 {'ByteOrder': 'LowByteFirst',
  'DATE (scan begin)': 'Mon Jun 28 21:22:16 2010',
  'ESRFCurrent': '198.099',
@@ -168,7 +183,7 @@ img.data *= 200.0/srcur
 img.write('normed_0001.edf')
 \end{verbatim}
 
-Interactive viewing
+Interactive viewing with matplotlib:
 
 \begin{verbatim}
 import pylab								# import pylab from matplotlib
@@ -230,9 +245,9 @@ Meanwhile FabIO will be upgraded to Python3; this change of version will affect
 a lot of the internal code of FabIO as all string handling and file handling
 changed between current Python2 and the new Python3. This change is already
 ongoing as many part of native code in C was re-implemented in
-Cython \cite{cython} to smooth the transition as Cython is compatible with
-Python3. Another issue is the absence of an offical PIL port to Python3, so PIL
-has already been made an optional dependency and its features could be
+Cython \cite{cython} to smooth the transition as Cython generates code 
+compatible with Python3. Another issue is the absence of an official PIL port to
+Python3, so PIL has already been made an optional dependency and its features could be
 reimplemented using other libraries. 
 
 \subsection{Conclusion}
@@ -241,7 +256,7 @@ FabIO gives an easy way to read and write 2D images when using the
 Python computer language.
 It has originally developed for X-ray diffraction but now gives
 an easy way for scientists to access and manipulate
-their data from a wide range of 2D detectors.
+their data from a wide range of 2D X-ray detectors.
 We welcome contributions to further improve the code and hope to add
 further file formats in the future as well as port the existing code base 
 to the emerging Python3.
@@ -274,22 +289,22 @@ TotalCryst.
 Python Module   & Detector		& Typical extension & Multi-image	& Write\\% & Notes\\
 \hline % alphabetical order - all formats are equal :-)
 adsc	   &   ADSC Quantum		&	.img	&	No	&	Yes		\\%Check\\
-brukeri		&   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
+bruker		&   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
 DM3			&						&	.dm3	&	?	&	?		\\%?\\
 edf		    &   ESRF data format	&	.edf	&	Yes	&	Yes		\\%Several bit formats\\
-EDNA-XML \cite(edna}	&	.xml	&	No		&	No	 \\%Internaly used in EDNA\cite{edna}\\
+EDNA-XML \cite{edna}	& &	.xml	&	No		&	No	 \\%Internaly used in EDNA\cite{edna}\\
 cbf		    &   CIF Binary Files	&	.cbf	&	No?	& 	Yes		\\%Used also by Pilatus \\
 kcd	    	&   Nonius 	KappaCCD	&	.kccd	&	No 	&	No		\\%Multiples frames are merged are reading. now bruker\\
-fit2dmask \cite{fit2d} 		&   .msk    &   No  &   Yes  \\
-fit2dspreadsheet \cite{fit2d}	&   .spr    &   No  &   Yes    \\
+fit2dmask \cite{fit2d} 	&			&   .msk    &   No  &   Yes  \\
+fit2dspreadsheet \cite{fit2d}	&  	&  .spr    &   No  &   Yes    \\
 GE		    &   General Electric	&	-		&	Yes	&	No?		\\%massivly multi-frame\\
 HiPiC       & Hamamatsu CCDs 		&	.tif	&	No	&	No?	 	\\%Tiff based format\\
 marccd		&   MarCCD/Mar165		&	.mccd	&	No	&	No?		\\%Tiff based format\\
-mar345		&   Mar345				&	.mar3450		&	No	&	Yes		\\%Compressed format\\
+mar345		&   Mar345 image plate	&	.mar3450		&	No	&	Yes		\\%Compressed format\\
 OXD		    &   Oxford Diffraction 	&	.img	&	No	&	Yes		\\%now Agilent\\
-pilatus	    & Dectris Pilatus Tiff		&	.tif	&	No?	&	No?		\\%Tiff based  format\\
-PNM			&	.pnm	&	No	&	?		\\% pnm is a unix image format
-TIFF		&	.tif	&	No	&	?		\\%can be compressed or not\\
+pilatus	    & Dectris Pilatus Tiff	&	.tif	&	No?	&	No?		\\%Tiff based  format\\
+PNM			&	Portable aNy Map	& .pnm	&	No	&	?		\\% pnm is a unix image format
+TIFF		&	Tagged Image File Format	&	.tif	&	No	&	?		\\%can be compressed or not\\
 \end{tabular}
 \end{center}
 \end{table}
