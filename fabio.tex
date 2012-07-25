@@ -47,56 +47,66 @@ FabIO can currently (ver. 0.1.0) read.
 
 \section{FabIO Python module}
 
-Python \cite{python} is a scripting language very popular among scientists but
-it allows writing well structured application and libraries. FabIO is is
-written in an object-oriented style (with classes) and has a comprehensive test suite
-used to prevent regression during the development.
+Python \cite{python} is a scripting language very popular among scientists
+which also allows writing well structured application and libraries.
+FabIO is written in an object-oriented style (with classes) and features a
+comprehensive test suite preventing regression during the development; as
+development is done in a collaborative and decentralized way.
 
 \subsection{Philosophy}
 
-The intention behind this development was to create a python module which would enable easy reading
-of 2D data images, from any detector, without having to worry about
+The intention behind this development was to create a Python module which would
+enable easy reading of 2D data images, from any detector, without having to worry about
 the file format.
 Therefore FabIO just needs a file name to open a file and it determines the
 file format automatically and deals with gzip \cite{gzip} and bzip2
 \cite{bzip2} compression transparently.
-An object is returned which stores the image data in memory as a 2D
-numpy array \cite{numpy}.
-If the file contains header information (metadata), these are also read and stored
-as strings in a python dictionary.
-
-Methods are provided for reading the previous or next image in
-a series of images as well as jumping to a specific file number.
+An object is returned, which stores the image
+{\em data} in memory as a 2D numpy array \cite{numpy} and the metadata,
+called {\em header}, in a python dictionary. Beside the
+{\em data} and {\em header} properties, some methods are provided for reading
+the {\em previous} or {\em next} image in a series of images as well as jumping
+to a specific file number.
 For the user, these auxiliary methods are intended to be independent of
 the image format (as far as is reasonably possible).
 The software is very modular, this allow to includes new classes for handling 
 other data formats quite easily. 
 FabIO and its source-code are freely available to everyone on-line \cite{fabio}, 
-licensed as GNU General Public License version 3 (GPLv3). 
+licensed as GNU General Public License version 3 (GPLv3) and available directly
+from popular linux distribution like Debian and Ubuntu.
 
 \subsection{Implementation}
-
-Generally FabIO have been code in Python \cite{python},
-though for some image formats the python code is merely interfaced a reading
-layer programmed in standard C (sometimes using cython \cite{cython}.
-FabIO makes use of the numerical python module numpy \cite{numpy} and there are
-two optional python modules which can be used Lxml, for reading XML files
-used in EDNA \cite{edna} and Python Image Library, PIL \cite{pil}.
-The PIL representation is useful for displaying images in a GUI based on
-the Python Tkinter library and also for access
-to the many image processing operations in that library.
-Images can displayed in a convenient interactive manner using
-matplotlib \cite{matplotlib} and an ipython shell \cite{ipython}, which is
-very useful for developing algorithms.
-Reading and writing of the various TIFF \cite{tiff} formats is based on the
-TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
+The main language used in the development of FabIO is Python \cite{python};
+however, some image formats are compressed which require
+compression algorithms for reading and writing data. When such algorithm cannot
+be implemented efficiently using NumPy, Python nativee modules were writen: this
+native code is standard C (sometimes generated using cython
+\cite{cython}) and compiled specificaly for the given architecture which
+offering excellent performances.
+% Generally FabIO have been code in Python \cite{python},
+% though for some image formats the python code is merely interfaced a reading
+% layer programmed in standard C (sometimes using cython \cite{cython}.
+Beside NumPy \cite{numpy} which is a strong dependency, two optional python
+modules can be used in FabIO, namely Lxml, for reading XML files used in EDNA
+\cite{edna} and the Python Image Library, PIL \cite{pil}.
+The PIL module provides useful feature for the display of images and many
+image-processing operations not re-implemented in FabIO.
+% The PIL representation is useful for displaying images in a GUI based on the Python Tkinter library and also for access
+% to the many image processing operations in that library.
+% FabIO do not integrate any visualisation tool, but, images can be displayed very
+% conveniently using the combination of the library matplotlib \cite{matplotlib} with the interactive python shell IPython \cite{ipython}. 
+% 
+Images can be displayed in a convenient interactive manner using
+matplotlib \cite{matplotlib} and an ipython shell \cite{ipython}, which is also 
+very useful for developing data analysiss algorithms.
+Reading and writing procedure of the various TIFF \cite{tiff} formats is based
+on the TiFFIO code of V. Armando Sol\'e from PyMCA \cite{pymca}.
 In the Python shell the {\em fabio} module must be imported prior to reading an
 image of one of the supported formats (see Table \ref{format}).
 The {\em fabio.open} function creates an instance of the python class {\em fabioimage},
-from the name of a file.
-This instance stores the image data in {\em img.data} as a numpy array
-Often the image file contains furthermore information than just
-the intensities of the pixels, e.g. information about how the image is
+from the name of a file. This instance stores the image data in {\em img.data}
+as a numpy array. Often the image file contains furthermore information than
+just the intensities of the pixels, e.g. information about how the image is
 stored and the instrument parameters at the time of the image acquisition.
 Header information, if available, is available in {\em img.header} as a Python
 dictionary.
