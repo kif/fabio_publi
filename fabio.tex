@@ -1,11 +1,23 @@
-\documentclass{iucr}
+\documentclass[preprint ]{iucr}
+ \papertype{CP}
+ \journalcode{J}
+
+
+%
+% This is needed for miktex on windows. From:
+% http://huang-nao.blogspot.fr/2009/05/harvard-package-problems-in-miktex.html
+%
+\RequirePackage{hyperref}
+\RequirePackage{harvard}
+\renewcommand{\harvardurl}{URL:\url}
+
 
 \begin{document}
 
 \title{FabIO: easy access to 2D X-ray detector images in Python}
 \shorttitle{FabIO}
 
-    \author[a]{Henning O.}{S$\o$rensen}
+    \author[a]{Henning O.}{S{\o}rensen}
     \author[b]{Erik B.}{Knudsen}
     \author[c]{Jonathan P.}{Wright}
 	\author[c]{Ga\"el}{Goret}
@@ -153,7 +165,7 @@ As any Python module, FabIO can be installed from its sources available on sourc
 but we advice to use packages provided for the most common
 platforms on sourceforge: Windows, MacOSX and Linux. Moreover FabIO is part of
 common Linux distribution Ubuntu (since 11.10) and Debian7 where the package is named
-{\em python-fabio} and can be install via {\em # apt-get install python-fabio}.
+{\em python-fabio} and can be install via {\em \# apt-get install python-fabio}.
 
 \subsection{Examples}
 
@@ -270,6 +282,9 @@ We finally acknowledge our colleagues who have reported bugs and helped to
 improve FabIO.
 Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
 TotalCryst.
+
+
+
 
 \bibliographystyle{iucr}
 \bibliography{biblio}
