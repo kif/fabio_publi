@@ -1,11 +1,23 @@
-\documentclass{iucr}
+\documentclass[preprint ]{iucr}
+ \papertype{CP}
+ \journalcode{J}
+
+
+%
+% This is needed for miktex on windows. From:
+% http://huang-nao.blogspot.fr/2009/05/harvard-package-problems-in-miktex.html
+%
+\RequirePackage{hyperref}
+\RequirePackage{harvard}
+\renewcommand{\harvardurl}{URL:\url}
+
 
 \begin{document}
 
 \title{FabIO: easy access to 2D X-ray detector images in Python}
 \shorttitle{FabIO}
 
-    \author[a]{Henning O.}{S$\o$rensen}
+    \author[a]{Henning O.}{S{\o}rensen}
     \author[b]{Erik B.}{Knudsen}
     \author[c]{Jonathan P.}{Wright}
 	\author[c]{Ga\"el}{Goret}
@@ -33,10 +45,10 @@ The code-base was initiated by merging parts of our fabian imageviewer
 \cite{fabian} and ImageD11 \cite{ImageD11} peak-search programs and has
 been developed since 2007 as part of the FABLE \cite{fable} program suite
 for analysis of 3DXRD microscopy data \cite{3dxrd}.
-While getting integrated in many scientific programs like FitAllB
+During integration into a range of scientific programs like FitAllB
 \cite{fitallb}, the FABLE graphical interface \cite{fable}, EDNA \cite{edna} and
-the fast azimuthal integration library, pyFAI \cite{pyfai}; FabIO got
-completed with missing features like multi-frame image formats as well as
+the fast azimuthal integration library, pyFAI \cite{pyfai}; FabIO has gained
+several features like handling multi-frame image formats as well as
 writing many of the file formats.
 
 We believe FabIO is now ready for a wider audience and could save other
@@ -47,8 +59,8 @@ FabIO can currently (ver. 0.1.0) read.
 
 \section{FabIO Python module}
 
-Python \cite{python} is a scripting language very popular among scientists
-which also allows writing well structured application and libraries.
+Python \cite{python} is a scripting language that is very popular among scientists
+and which also allows well structured application and libraries to be developed.
 
 \subsection{Philosophy}
 
@@ -58,7 +70,7 @@ worry about the file format.
 Therefore FabIO just needs a file name to open a file and it determines the
 file format automatically and deals with gzip \cite{gzip} and bzip2
 \cite{bzip2} compression transparently.
-An object is returned, which stores the image
+Opening a file returns an object which stores the image
 {\em data} in memory as a 2D NumPy array \cite{numpy} and the metadata,
 called {\em header}, in a python dictionary. Beside the
 {\em data} and {\em header} properties, some methods are provided for reading
@@ -68,39 +80,39 @@ For the user, these auxiliary methods are intended to be independent of
 the image format (as far as is reasonably possible).
 
 FabIO is written in an object-oriented style (with classes) but aims at being
-used in a scripting environment: special care has been set on the ease of
-access, especially for scientists with limited knowledge in programming. So
-no object-oriented programming is needed to get full benefits of
-the library. 
+used in a scripting environment: special care has been taken to ensure the 
+library remains easy to use. 
+Therefore no knowledge of object-oriented programming is required to get 
+full benefits of the library. 
 As the development is done in a collaborative and decentralized way; a
-comprehensive test suite has been added to prevent any regression during the
-development. The software being very modular, allows to include new
-classes for handling other data formats quite easily.
+comprehensive test suite has been added to reduce the number of regressions
+when new features are added or old problems are repaired. 
+The software is very modular and allows new classes to be added for handling 
+other data formats quite easily.
 FabIO and its source-code are freely available to everyone on-line \cite{fabio}, 
 licensed under the GNU General Public License version 3 (GPLv3) and available
 directly from popular Linux distribution like Debian and Ubuntu.
 
 \subsection{Implementation}
 The main language used in the development of FabIO is Python \cite{python};
-however, some image formats are compressed which require
-compression algorithms for reading and writing data. When such algorithm cannot
-be implemented efficiently using NumPy, we used Python native modules, i.e.
-standard C code callable from Python (sometimes generated using Cython
-\cite{cython}) and compiled specificaly for the given architecture which
-offers excellent performances.
-% Generally FabIO have been code in Python \cite{python},
-% though for some image formats the python code is merely interfaced a reading
-% layer programmed in standard C (sometimes using cython \cite{cython}.
-Beside NumPy which is a strong dependency, two optional python
-modules can be used in FabIO, namely Lxml, for reading XML files used in EDNA
-and the Python Image Library, PIL \cite{pil}.
-The PIL module provides useful feature for the display of images and many
-image-processing operations not re-implemented in FabIO.
-% The PIL representation is useful for displaying images in a GUI based on the Python Tkinter library and also for access
-% to the many image processing operations in that library.
-% FabIO do not integrate any visualisation tool, but, images can be displayed very
-% conveniently using the combination of the library matplotlib \cite{matplotlib} with the interactive python shell IPython \cite{ipython}. 
-% 
+however, some image formats are compressed and require
+compression algorithms for reading and writing data. 
+When such algorithms could not be implemented efficiently using Python or NumPy 
+then native modules were developed, i.e. standard C code callable from Python 
+(sometimes generated using Cython \cite{cython}).
+This code has to be compiled for each computer architecture and offers 
+excellent performance.
+FabIO is dependent on the numpy module and has extra features if two other
+optional python modules are available. 
+For reading XML files (that are used in EDNA) the Lxml module is required 
+and the Python Image Library, PIL \cite{pil} is needed for the display of 
+images and several image-processing operations that are not re-implemented 
+in FabIO.
+A variety of useful image processing is also available in the scipy.ndimage 
+module \cite{scipy}.
+%FIXME is it now scikits??
+
+
 Images can also be displayed in a convenient interactive manner using
 matplotlib \cite{matplotlib} and an IPython shell \cite{ipython}, which is
 mainly used for developing data analysis algorithms.
@@ -108,29 +120,34 @@ Reading and writing procedure of the various TIFF \cite{tiff} formats is based
 on the TiFFIO code from PyMCA \cite{pymca}.
 
 In the Python shell, the {\em fabio} module must be imported prior to reading an
-image of one of the supported formats (see Table \ref{format}).
+image in one of the supported file formats (see Table \ref{format}).
 The {\em fabio.open} function creates an instance of the Python class {\em fabioimage},
 from the name of a file. This instance, named {\em img} hereafter, stores the
 image data in {\em img.data} as a 2D NumPy array. Often the image file contains
-furthermore information than just the intensities of the pixels, e.g.
+more information than just the intensities of the pixels, e.g.
 information about how the image is stored and the instrument parameters at the
-time of the image acquisition which  are called metadata and usually stored in
+time of the image acquisition, these metadata are usually stored in
 the file header.
 Header information, are available in {\em img.header} as a Python
-dictionary where keys are Python String, values being usually strings or
+dictionary where keys are strings and values are usually strings or
 numeric values.
 
-Currently, FabIO does not attempt to interpret or translate metadata which
+Currently, FabIO does not attempt to interpret or translate any metadata which
 is found in the headers of various frame formats, but merely presents the
 information as a string. Nevertheless FabIO is capable of converting one
-data-format into another, taking care of the numerical specificities: 
-for example float array are converted to integer array if the output format only
+image data-format into another by taking care of the numerical specificities: 
+for example float arrays are converted to integer arrays if the output format only
 accepts integers.
 
 
 \subsection{FabIO methods}
 
-One the strengths of the implementation in an object oriented language as Python
+% max/min should really be directly the numpy array methods on img.data
+% This paragraph is repeated information from above. We can compress a bit 
+% for overall length perhaps by moving that here or this there.
+
+
+One the strengths of the implementation in an object oriented language
 is the possibility to combine functions (or methods) together with data which
 are appropriate for specific formats.
 In addition to the header information and image data, every {\em fabioimage}
@@ -149,11 +166,13 @@ via the {\em .nframes} property).
 
 \section{Installation}
 
-As any Python module, FabIO can be installed from its sources available on sourceforge\cite{fabio}
-but we advice to use packages provided for the most common
-platforms on sourceforge: Windows, MacOSX and Linux. Moreover FabIO is part of
-common Linux distribution Ubuntu (since 11.10) and Debian7 where the package is named
-{\em python-fabio} and can be install via {\em # apt-get install python-fabio}.
+As any Python module, FabIO can be installed from its sources available on 
+sourceforge\cite{fabio}.
+We generally advise users to try the packages provided for the most common
+platforms on sourceforge: Windows, MacOSX and Linux. 
+Moreover FabIO is part of
+common Linux distributions Ubuntu (since 11.10) and Debian7 where the package is named
+{\em python-fabio} and can be installed via {\em \# apt-get install python-fabio}.
 
 \subsection{Examples}
 
@@ -191,63 +210,40 @@ pylab.imshow(img.data) # display as an image
 pylab.show()           # show GUI window
 \end{verbatim}
 
-%\begin{verbatim}
-%> import fabio
-%> im = fabio.open(’Quartz_0100.tif’)	# Open image file
-%> im.data								# Print image data
-%> im = im.next()						# Open next image
-%> im = im.getframe(270)				# Jump to file number.
-%\end{verbatim}
-
-
-%\begin{verbatim}
-%> import fabio 								# import the fabio module
-%> img = fabio.open(‘exampleimage0001.edf’) 	# Create a fabioimage instance from the file
-%> img.header 								# prints all headers from the file as a python dict.
-%{'ByteOrder': 'LowByteFirst',
-% 'DATE (scan begin)': 'Mon Jun 28 21:22:16 2010',
-% 'DataType': 'UnsignedShort',
-% 'Detector': 'frelon4m (sn=29)',
-% 'Dim_1': '2048',
-% 'Dim_2': '2048',
-% 'ESRFAutoTime': '62.2611',
-% 'ESRFBeamLine': 'id11',
-% 'ESRFCurrent': '200.099',
-% 'ESRFFillMode': '7/8 multibunch',
-% 'ESRFRefill': '38265',
-% 'Experiment': 'ma558',
-% 'Fz1': '20.465713',
-% 'Fz2': '20.467421',
-%……
-% 'zb': '22.300000',
-% 'zm': '1.239060'}
-%> Fz1 = img.header[‘Fz1’]					# retrieve an individual value
-%>
-%> import pylab								# import pylab from matplotlib
-%> pylab.imshow(img.data)					# display as an image
-%> pylab.show()								# show window
-%\end{verbatim}
-
 
 \section{Future and perspectives}
 
 Hierarchical data format version 5 \cite{hdf5} is a data format which is
-getting popular in the field of X-rays data storage. For now, mainly processed
-or curated data are stored in this format but new detector may provide native
-output in HDF5 (i.e. the detector Eiger from Dectris is planed to do so). As the
-internal structure of HDF5 is very versatile, FabIO will expose specifically
-detector images (data and headers) when the internal structure of such files
-will be known. H5Py \cite{h5py}, which provides good HDF5 Python binding, is likely to
-be used by FabIO for interfacing such files. 
+becoming popular in the field of synchrotron X-ray data storage. 
+For now, mainly processed or curated data are stored in this format but 
+new detectors are rumoured to provide native output in HDF5.
+% If there is no citation then this is not really something for us to report?
+% (i.e. the detector Eiger from Dectris is planeed to do so). 
+Since the internal structure of HDF5 is very versatile, FabIO will need to expose 
+specifically detector images (data and headers) when the internal structure 
+of such files becomes known. 
+H5Py \cite{h5py}, which provides a good HDF5 binding for Python, is likely to
+make it easy to interface FabIO to such files.
 
-Meanwhile FabIO will be upgraded to Python3; this change of version will affect
-a lot of the internal code of FabIO as all string handling and file handling
-changed between current Python2 and the new Python3. This change is already
-ongoing as many part of native code in C was re-implemented in
-Cython \cite{cython} to smooth the transition as Cython generates code 
-compatible with Python3. Another issue is the absence of an official PIL port to
-Python3, so PIL has already been made an optional dependency and its features could be
-reimplemented using other libraries. 
+In the near future FabIO will be upgraded to work with Python3 (a new version of 
+Python); this change of version will affect some internals FabIO as string and 
+file handling have been altered.
+This change is already ongoing as many parts of native code in C have already
+been translated into Cython \cite{cython} to smooth the transition, since 
+Cython generates code compatible with Python3. 
+This also makes it easier to retain backwards compatibility with the earlier
+python versions. % hint hint :-)
+
+%Another issue is the absence of an official PIL port to
+%Python3, so PIL has already been made an optional dependency and its features could be
+%reimplemented using other libraries. 
+%
+% Readers of J.Appl.Cryst probably dont care about so much detail.
+% The PIL site says it will be released "later" and private ports are already
+% available.
+% scipy.ndimage does filtering, fabian will have to cross that bridge
+% when it goes to python3.
+%
 
 \subsection{Conclusion}
 
@@ -265,11 +261,15 @@ to the emerging Python3.
 We acknowledge Andy G\"otz and Kenneth Evans for extensive testing when including
 the FabIO reader in the Fable ImageViewer.
 We also thank V. Armando Sol\'e for assistance with his TiffIO reader and
-Carsten Gundlach for implementation of FabIO at the beamlines i711 and i811, MAX IV and providing bug reports.
+Carsten Gundlach for implementation of FabIO at the beamlines i711 and i811, 
+MAX IV and providing bug reports.
 We finally acknowledge our colleagues who have reported bugs and helped to
 improve FabIO.
 Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
 TotalCryst.
+
+
+
 
 \bibliographystyle{iucr}
 \bibliography{biblio}
