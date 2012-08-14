@@ -11,24 +11,26 @@
 \RequirePackage{harvard}
 \renewcommand{\harvardurl}{URL:\url}
 
+\usepackage{booktabs}
 
 \begin{document}
+
 
 \title{FabIO: easy access to 2D X-ray detector images in Python}
 \shorttitle{FabIO}
 
-    \author[a]{Henning O.}{S{\o}rensen}
-    \author[b]{Erik B.}{Knudsen}
+    \author[a]{Erik B.}{Knudsen}
+    \author[b]{Henning O.}{S{\o}rensen}
     \author[c]{Jonathan P.}{Wright}
 	\author[c]{Ga\"el}{Goret}
 	\cauthor[c]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
 % swapped JK & GG to prevent line-jump (cesure) 
-    \aff[a]{Nano-Science Center, Department of Chemistry, University of Copenhagen,
-            Universitetsparken 5, \city{Copenhagen}, \country{Denmark} }
-    \aff[b]{Department of Physics, Technical University of Denmark,
+    \aff[a]{Department of Physics, Technical University of Denmark,
             \city{Kongens Lyngby} \country{Denmark}}
+    \aff[b]{Nano-Science Center, Department of Chemistry, University of Copenhagen,
+            Universitetsparken 5, \city{Copenhagen}, \country{Denmark} }
     \aff[c]{European Synchrotron Radiation Facility, \city{Grenoble}, \country{France}}
-	\shortauthor{S$\o$rensen et al.}
+	\shortauthor{Knudsen et al.}
 
 \maketitle
 
@@ -53,7 +55,7 @@ writing many of the file formats.
 
 We believe FabIO is now ready for a wider audience and could save other
 researchers from repeating the work involved in decoding a
-binary file format.The table \ref{format} shows the list of file formats that
+binary file format. Table \ref{format} shows the list of file formats that
 FabIO can currently (ver. 0.1.0) read.
 
 
@@ -171,7 +173,11 @@ sourceforge\cite{fabio}.
 We generally advise users to try the packages provided for the most common
 platforms on sourceforge: Windows, MacOSX and Linux. 
 Moreover FabIO is part of
-common Linux distributions Ubuntu (since 11.10) and Debian7 where the package is named
+the common Linux distributions Ubuntu (since 11.10) and Debian7 where the package is named
+As any Python module, FabIO can be installed from its sources available on sourceforge//\cite{fabio}
+but we advice to use packages provided for the most common
+platforms on sourceforge: Windows, MacOSX and Linux. Moreover FabIO is part of
+the common Linux distributions Ubuntu (since 11.10) and Debian 7 where the package is named
 {\em python-fabio} and can be installed via {\em \# apt-get install python-fabio}.
 
 \subsection{Examples}
@@ -279,14 +285,18 @@ TotalCryst.
 \section{Various detector format supported by FabIO.}
 % put in appendix it can be full width
 \onecolumn
-\begin{table}[h]
-
-\caption{\label{format}List of file formats that FabIO can read and write}
+\begin{table}
+\label{format}
+\caption{List of file formats that FabIO can read and write (in
+alphabetical order). The listed filename extensions are typical examples.
+FabIO tries to deduce the actual format from the file itself and only
+uses extensions as a fallback if that fails.}
 \vspace{1mm}
 \begin{center}
 \begin{tabular}{llccc}
 Python Module   & Detector		& Typical extension & Multi-image	& Write\\% & Notes\\
-\hline % alphabetical order - all formats are equal :-)
+\midrule
+%\hline % alphabetical order - all formats are equal :-)
 adsc	   &   ADSC Quantum		&	.img	&	No	&	Yes		\\%Check\\
 bruker		&   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
 DM3			&						&	.dm3	&	?	&	?		\\%?\\
