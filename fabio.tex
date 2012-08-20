@@ -111,15 +111,14 @@ and the Python Image Library, PIL \cite{pil} is needed for the display of
 images and several image-processing operations that are not re-implemented 
 in FabIO.
 A variety of useful image processing is also available in the scipy.ndimage 
-module \cite{scipy}.
-%FIXME is it now scikits??
+module \cite{scipy} and scikit-image (skimage)\cite{skimage}.
 
 
 Images can also be displayed in a convenient interactive manner using
 matplotlib \cite{matplotlib} and an IPython shell \cite{ipython}, which is
 mainly used for developing data analysis algorithms.
 Reading and writing procedure of the various TIFF \cite{tiff} formats is based
-on the TiFFIO code from PyMCA \cite{pymca}.
+on the TiffIO code from PyMCA \cite{pymca}.
 
 In the Python shell, the {\em fabio} module must be imported prior to reading an
 image in one of the supported file formats (see Table \ref{format}).
@@ -156,12 +155,12 @@ In addition to the header information and image data, every {\em fabioimage}
 instance (returned by {\em fabio.open}) has methods inherited from fabioimage 
 which provide information about the image minimum, maximum and mean values.
 There are methods which gives the file number, name etc. One of the most
-important methods which actually changes for certain formats  is get next image
-in a sequence; these methods are {\em .next()}, {\em .previous()}, and {\em
+important methods which actually changes for certain formats  is {\em get next image
+in a sequence}; these methods are {\em .next()}, {\em .previous()}, and {\em
 .getframe(n)}. Of course the behaviour of such methods varies depending on the
 image format: if it is single-framed (like mar345),  {\em .next()} will
 return the image in next file. On multi-frame format (like GE), {\em .next()} will
-return the next frame within the same file. For format wich are possibly multi-framed like
+return the next frame within the same file. For format which are possibly multi-framed like
 EDF, the behaviour depends on the actual number of frames per file (accessible
 via the {\em .nframes} property).
 
@@ -220,11 +219,12 @@ pylab.show()           # show GUI window
 \section{Future and perspectives}
 
 Hierarchical data format version 5 \cite{hdf5} is a data format which is
-becoming popular in the field of synchrotron X-ray data storage. 
-For now, mainly processed or curated data are stored in this format but 
+increasingly popular in the field of synchrotron X-ray data storage;  
+for now, mainly processed or curated data are stored in this format but 
 new detectors are rumoured to provide native output in HDF5.
 % If there is no citation then this is not really something for us to report?
 % (i.e. the detector Eiger from Dectris is planeed to do so). 
+% JK: Shall we mention Soleil or Diamon are already storing data in HDF5 ?
 Since the internal structure of HDF5 is very versatile, FabIO will need to expose 
 specifically detector images (data and headers) when the internal structure 
 of such files becomes known. 
@@ -297,23 +297,23 @@ uses extensions as a fallback if that fails.}
 Python Module   & Detector		& Typical extension & Multi-image	& Write\\% & Notes\\
 \midrule
 %\hline % alphabetical order - all formats are equal :-)
-adsc	   &   ADSC Quantum		&	.img	&	No	&	Yes		\\%Check\\
-bruker		&   Bruker formats		&	.sfrm	&	No	&	Yes		\\%TODO Complete\\
-DM3			&						&	.dm3	&	?	&	?		\\%?\\
-edf		    &   ESRF data format	&	.edf	&	Yes	&	Yes		\\%Several bit formats\\
-EDNA-XML \cite{edna}	& &	.xml	&	No		&	No	 \\%Internaly used in EDNA\cite{edna}\\
-cbf		    &   CIF Binary Files	&	.cbf	&	No?	& 	Yes		\\%Used also by Pilatus \\
-kcd	    	&   Nonius 	KappaCCD	&	.kccd	&	No 	&	No		\\%Multiples frames are merged are reading. now bruker\\
-fit2dmask \cite{fit2d} 	&			&   .msk    &   No  &   Yes  \\
-fit2dspreadsheet \cite{fit2d}	&  	&  .spr    &   No  &   Yes    \\
-GE		    &   General Electric	&	-		&	Yes	&	No?		\\%massivly multi-frame\\
-HiPiC       & Hamamatsu CCDs 		&	.tif	&	No	&	No?	 	\\%Tiff based format\\
-marccd		&   MarCCD/Mar165		&	.mccd	&	No	&	No?		\\%Tiff based format\\
-mar345		&   Mar345 image plate	&	.mar3450		&	No	&	Yes		\\%Compressed format\\
-OXD		    &   Oxford Diffraction 	&	.img	&	No	&	Yes		\\%now Agilent\\
-pilatus	    & Dectris Pilatus Tiff	&	.tif	&	No?	&	No?		\\%Tiff based  format\\
-PNM			&	Portable aNy Map	& .pnm	&	No	&	?		\\% pnm is a unix image format
-TIFF		&	Tagged Image File Format	&	.tif	&	No	&	?		\\%can be compressed or not\\
+ADSC		&   ADSC Quantum				&	.img	&	$\times$	&	$\surd$		\\%Check\\
+Bruker		&   Bruker formats				&	.sfrm	&	$\times$	&	$\surd$		\\%TODO Complete\\
+DM3			&	Gatan Digital Micrograph	&	.dm3	&	$\times$	&	$\times$	\\%?\\
+EDF		    &   ESRF data format			&	.edf	&	$\surd$		&	$\surd$		\\%Several bit formats\\
+EDNA-XML	& 	Used by EDNA \cite{edna}	&	.xml	&	$\times$	&	$\times$	 \\%Internaly  used in EDNA\\
+CBF		    &   CIF binary files			&	.cbf	&	$\times$ (todo)	& 	$\surd$		\\%Used also by Pilatus \\
+kcd	    	&   Nonius 	KappaCCD			&	.kccd	&	$\times$ 	&	$\times$		\\%Multiples frames are merged are reading. $\times$w bruker\\
+fit2dmask  	&	Used by Fit2D \cite{fit2d}	&   .msk    &   $\times$  &   $\surd$  \\
+fit2dspreadsheet & Used by Fit2D \cite{fit2d} 	&  .spr    &   $\times$  & $\surd$    \\
+GE		    &   General Electric	&	-		&	$\surd$	&	$\times$		\\%massivly multi-frame\\
+HiPiC       & 	Hamamatsu CCD 		&	.tif	&	$\times$	&	$\times$	 	\\%Tiff based format\\
+marccd		&   MarCCD/Mar165		&	.mccd	&	$\times$	&	$\times$		\\%Tiff based format\\
+mar345		&   Mar345 image plate	&	.mar3450		&	$\times$	&	$\surd$		\\%Compressed format\\
+OXD		    &   Oxford Diffraction 	&	.img	&	$\times$	&	$\surd$		\\%$\times$w Agilent\\
+pilatus	    & Dectris Pilatus Tiff	&	.tif	&	$\times$	&	$\times$		\\%Tiff based  format\\
+PNM			&	Portable aNy Map	& .pnm	&	$\times$	&	$\times$		\\% pnm is a unix image format
+TIFF		&	Tagged Image File Format	&	.tif	&	$\times$	&	$\surd$		\\%can be compressed or not\\
 \end{tabular}
 \end{center}
 \end{table}
