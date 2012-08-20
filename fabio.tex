@@ -99,20 +99,19 @@ directly from popular Linux distribution like Debian and Ubuntu.
 The main language used in the development of FabIO is Python \cite{python};
 however, some image formats are compressed and require
 compression algorithms for reading and writing data. 
-When such algorithms could not be implemented efficiently using Python or NumPy 
+When such algorithms could not be implemented efficiently using Python or NumPy,
 then native modules were developed, i.e. standard C code callable from Python 
 (sometimes generated using Cython \cite{cython}).
 This code has to be compiled for each computer architecture and offers 
 excellent performance.
-FabIO is dependent on the numpy module and has extra features if two other
+FabIO is only dependent on the NumPy module and has extra features if two other
 optional python modules are available. 
-For reading XML files (that are used in EDNA) the Lxml module is required 
-and the Python Image Library, PIL \cite{pil} is needed for the display of 
+For reading XML files (that are used in EDNA) the Lxml \cite{lxml} module is
+required and the Python Image Library, PIL \cite{pil} is needed for the display of 
 images and several image-processing operations that are not re-implemented 
 in FabIO.
 A variety of useful image processing is also available in the scipy.ndimage 
-module \cite{scipy} and scikit-image (skimage)\cite{skimage}.
-
+module \cite{scipy} and and in scikit-image \cite{skimage}.
 
 Images can also be displayed in a convenient interactive manner using
 matplotlib \cite{matplotlib} and an IPython shell \cite{ipython}, which is
@@ -134,8 +133,8 @@ dictionary where keys are strings and values are usually strings or
 numeric values.
 
 Currently, FabIO does not attempt to interpret or translate any metadata which
-is found in the headers of various frame formats, but merely presents the
-information as a string. Nevertheless FabIO is capable of converting one
+is found in headers of various file formats, but merely presents the
+information. Nevertheless FabIO is capable of converting one
 image data-format into another by taking care of the numerical specificities: 
 for example float arrays are converted to integer arrays if the output format only
 accepts integers.
@@ -154,10 +153,11 @@ are appropriate for specific formats.
 In addition to the header information and image data, every {\em fabioimage}
 instance (returned by {\em fabio.open}) has methods inherited from fabioimage 
 which provide information about the image minimum, maximum and mean values.
-There are methods which gives the file number, name etc. One of the most
-important methods which actually changes for certain formats  is {\em get next image
-in a sequence}; these methods are {\em .next()}, {\em .previous()}, and {\em
-.getframe(n)}. Of course the behaviour of such methods varies depending on the
+There are methods which gives the file number, name etc. 
+Some of the most important methods which actually changes for certain formats 
+are related to the handling of frames in a sequence; these methods are {\em
+.next()}, {\em .previous()}, and {\em .getframe(n)}.
+Of course the behaviour of such methods varies depending on the
 image format: if it is single-framed (like mar345),  {\em .next()} will
 return the image in next file. On multi-frame format (like GE), {\em .next()} will
 return the next frame within the same file. For format which are possibly multi-framed like
@@ -167,7 +167,7 @@ via the {\em .nframes} property).
 
 \section{Installation}
 
-As any Python module, FabIO can be installed from its sources available on 
+As any Python module, FabIO can be installed from its sources, available on 
 sourceforge \cite{fabio} but we advice to use binary packages provided for the
 most common platforms on sourceforge: Windows, MacOSX and Linux.
 Moreover FabIO is part of the common Linux distributions Ubuntu (since 11.10)
@@ -214,17 +214,18 @@ pylab.show()           # show GUI window
 \section{Future and perspectives}
 
 Hierarchical data format version 5 \cite{hdf5} is a data format which is
-increasingly popular in the field of synchrotron X-ray data storage;  
-for now, mainly processed or curated data are stored in this format but 
+increasingly popular in the field of synchrotron X-ray data storage.
+For now, mainly processed or curated data are stored in this format but 
 new detectors are rumoured to provide native output in HDF5.
 % If there is no citation then this is not really something for us to report?
 % (i.e. the detector Eiger from Dectris is planeed to do so). 
-% JK: Shall we mention Soleil or Diamon are already storing data in HDF5 ?
+% JK: Shall we mention Soleil or Diamons which are already storing data in HDF5
+% ?
 Since the internal structure of HDF5 is very versatile, FabIO will need to expose 
 specifically detector images (data and headers) when the internal structure 
-of such files becomes known. 
-H5Py \cite{h5py}, which provides a good HDF5 binding for Python, is likely to
-make it easy to interface FabIO to such files.
+of such files becomes known. FabIO will rely on H5Py \cite{h5py}, which already
+provides a good HDF5 binding for Python, as an externel dependency, to be able
+to read and write such HDF5 files.
 
 In the near future FabIO will be upgraded to work with Python3 (a new version of 
 Python); this change of version will affect some internals FabIO as string and 
