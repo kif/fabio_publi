@@ -75,7 +75,7 @@ file format automatically and deals with gzip \cite{gzip} and bzip2
 Opening a file returns an object which stores the image
 {\em data} in memory as a 2D NumPy array \cite{numpy} and the metadata,
 called {\em header}, in a python dictionary. Beside the
-{\em data} and {\em header} properties, some methods are provided for reading
+{\em data} and {\em header} attributes, some methods are provided for reading
 the {\em previous} or {\em next} image in a series of images as well as jumping
 to a specific file number.
 For the user, these auxiliary methods are intended to be independent of
@@ -142,11 +142,6 @@ accepts integers.
 
 \subsection{FabIO methods}
 
-% max/min should really be directly the numpy array methods on img.data
-% This paragraph is repeated information from above. We can compress a bit 
-% for overall length perhaps by moving that here or this there.
-
-
 One the strengths of the implementation in an object oriented language
 is the possibility to combine functions (or methods) together with data which
 are appropriate for specific formats.
@@ -156,13 +151,13 @@ which provide information about the image minimum, maximum and mean values.
 There are methods which gives the file number, name etc. 
 Some of the most important methods which actually changes for certain formats 
 are related to the handling of frames in a sequence; these methods are {\em
-.next()}, {\em .previous()}, and {\em .getframe(n)}.
+img.next()}, {\em img.previous()}, and {\em img.getframe(n)}.
 Of course the behaviour of such methods varies depending on the
-image format: if it is single-framed (like mar345),  {\em .next()} will
-return the image in next file. On multi-frame format (like GE), {\em .next()} will
-return the next frame within the same file. For format which are possibly multi-framed like
+image format: if it is single-framed (like mar345),  {\em img.next()} will
+return the image in next file. On multi-frame format (like GE), {\em img.next()}
+will return the next frame within the same file. For format which are possibly multi-framed like
 EDF, the behaviour depends on the actual number of frames per file (accessible
-via the {\em .nframes} property).
+via the {\em img.nframes} attribute).
 
 
 \section{Installation}
@@ -176,18 +171,16 @@ via {\em \# apt-get install python-fabio}.
 
 \subsection{Examples}
 
-Opening an image:
-
+Opening an image:\\
 \begin{verbatim}
 import fabio     
 im0 = fabio.open('Quartz_0100.tif') # Open image file
-print(im0.data[1024,1024]) # check a pixel value
-im1 = im0.next() # Open next image
-im270 = im1.getframe(270) # Jump to file number
+print(im0.data[1024,1024])          # check a pixel value
+im1 = im0.next()                    # Open next image
+im270 = im1.getframe(270)           # Jump to file number
 \end{verbatim}
 
-Normalising the intensity to a value in the header:
-
+Normalising the intensity to a value in the header:\\
 \begin{verbatim}
 img = fabio.open('exampleimage0001.edf')
 print(img.header)
@@ -202,12 +195,11 @@ img.data *= 200.0/srcur
 img.write('normed_0001.edf')
 \end{verbatim}
 
-Interactive viewing with matplotlib:
-
+Interactive viewing with matplotlib:\\
 \begin{verbatim}
-import pylab           # pylab is part of matplotlib
-pylab.imshow(img.data) # display as an image
-pylab.show()           # show GUI window
+from matplotlib import pyplot       # load matplotlib 
+pyplot.imshow(img.data)             # display as an image
+pyplot.show()                       # show GUI window
 \end{verbatim}
 
 
@@ -215,8 +207,9 @@ pylab.show()           # show GUI window
 
 Hierarchical data format version 5 \cite{hdf5} is a data format which is
 increasingly popular in the field of synchrotron X-ray data storage.
-For now, mainly processed or curated data are stored in this format but 
-new detectors are rumoured to provide native output in HDF5.
+For now, mainly processed or curated data are stored in this format (Synchrotron
+Soleil \cite{tub05} already does so) but new detectors are
+rumoured to provide native output in HDF5.
 % If there is no citation then this is not really something for us to report?
 % (i.e. the detector Eiger from Dectris is planeed to do so). 
 % JK: Shall we mention Soleil or Diamons which are already storing data in HDF5
@@ -298,7 +291,7 @@ Bruker		&   Bruker formats				&	.sfrm	&	$\times$	&	$\surd$		\\%TODO Complete\\
 DM3			&	Gatan Digital Micrograph	&	.dm3	&	$\times$	&	$\times$	\\%?\\
 EDF		    &   ESRF data format			&	.edf	&	$\surd$		&	$\surd$		\\%Several bit formats\\
 EDNA-XML	& 	Used by EDNA \cite{edna}	&	.xml	&	$\times$	&	$\times$	 \\%Internaly  used in EDNA\\
-CBF		    &   CIF binary files			&	.cbf	&	$\times$ (todo)	& 	$\surd$		\\%Used also by Pilatus \\
+CBF		    &   CIF binary files			&	.cbf	&	$\times$ 	& 	$\surd$		\\%Used also by Pilatus \\
 kcd	    	&   Nonius 	KappaCCD			&	.kccd	&	$\times$ 	&	$\times$		\\%Multiples frames are merged are reading. $\times$w bruker\\
 fit2dmask  	&	Used by Fit2D \cite{fit2d}	&   .msk    &   $\times$  &   $\surd$  \\
 fit2dspreadsheet & Used by Fit2D \cite{fit2d} 	&  .spr    &   $\times$  & $\surd$    \\
