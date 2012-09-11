@@ -22,8 +22,8 @@
     \author[a]{Erik B.}{Knudsen}
     \author[b]{Henning O.}{S{\o}rensen}
     \author[c]{Jonathan P.}{Wright}
-	\author[c]{Ga\"el}{Goret}
-	\cauthor[c]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
+    \author[c]{Ga\"el}{Goret}
+    \cauthor[c]{J\'er\^ome}{Kieffer}{jerome.kieffer@esrf,fr}{}
 % swapped JK & GG to prevent line-jump (cesure) 
     \aff[a]{Department of Physics, Technical University of Denmark,
             \city{Kongens Lyngby} \country{Denmark}}
@@ -204,8 +204,7 @@ pyplot.show()                       # show GUI window
 
 
 \section{Future and perspectives}
-
-Hierarchical data format version 5 \cite{hdf5} is a data format which is
+The Hierarchical Data Format version 5 \cite{hdf5} is a data format which is
 increasingly popular in the field of synchrotron X-ray data storage.
 For now, mainly processed or curated data are stored in this format (Synchrotron
 Soleil \cite{tub05} already does so) but new detectors are
@@ -217,7 +216,7 @@ rumoured to provide native output in HDF5.
 Since the internal structure of HDF5 is very versatile, FabIO will need to expose 
 specifically detector images (data and headers) when the internal structure 
 of such files becomes known. FabIO will rely on H5Py \cite{h5py}, which already
-provides a good HDF5 binding for Python, as an externel dependency, to be able
+provides a good HDF5 binding for Python, as an external dependency, to be able
 to read and write such HDF5 files.
 
 In the near future FabIO will be upgraded to work with Python3 (a new version of 
@@ -270,9 +269,6 @@ TotalCryst.
 \bibliography{biblio}
 
 
-\appendix
-\section{Various detector format supported by FabIO.}
-% put in appendix it can be full width
 \onecolumn
 \begin{table}
 \label{format}
