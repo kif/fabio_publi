@@ -52,9 +52,9 @@ To overcome this problem we decided to develop a general module,
 FabIO (FABle I/O), to handle reading and writing of two-dimensional
 data.
 The code-base was initiated by merging parts of our fabian imageviewer
-\cite{fabian} and ImageD11 \cite{ImageD11} peak-search programs and has
-been developed since 2007 as part of the FABLE \cite{fable} program suite
-for analysis of 3DXRD microscopy data \cite{3dxrd}.
+\cite{fabian} and ImageD11 \cite{imaged11} peak-search programs and has
+been developed since 2007 as part of the TotalCryst \cite{totalcryst}
+program suite for analysis of 3DXRD microscopy data \cite{3dxrd}.
 During integration into a range of scientific programs like the FABLE graphical
 interface \cite{fable}, EDNA \cite{edna} and
 the fast azimuthal integration library, pyFAI \cite{pyfai}; FabIO has gained
@@ -140,9 +140,13 @@ Header information, are available in {\em img.header} as a Python
 dictionary where keys are strings and values are usually strings or
 numeric values.
 
-Currently, FabIO does not attempt to interpret or translate any metadata which
-is found in headers of various file formats, but merely presents the
-information. Nevertheless FabIO is capable of converting one
+Information in the header about the binary part of the image (compression,
+endianness, shape) are interpreted however, other other metadata are exposed as
+they are recorded in the file. Where possible, FabIO allows the user to modify
+and save this information.
+Automatic translation between file-formats, even if desirable, is sometimes
+impossible because not all format have the capability ro be extended with
+additionnal metadata. Nevertheless FabIO is capable of converting one
 image data-format into another by taking care of the numerical specifics: 
 for example float arrays are converted to integer arrays if the output format only
 accepts integers.
@@ -249,14 +253,14 @@ to the emerging Python3.
 \ack{Acknowledgements}
 
 We acknowledge Andy G\"otz and Kenneth Evans for extensive testing when including
-the FabIO reader in the Fable ImageViewer.
+the FabIO reader in the Fable ImageViewer \cite{fable}.
 We also thank V. Armando Sol\'e for assistance with his TiffIO reader and
 Carsten Gundlach for implementation of FabIO at the beamlines i711 and i811, 
 MAX IV and providing bug reports.
 We finally acknowledge our colleagues who have reported bugs and helped to
 improve FabIO.
 Financial support was granted by the EU 6th Framework NEST/ADVENTURE project
-TotalCryst.
+TotalCryst \cite{totalcryst}.
 
 
 
@@ -272,27 +276,26 @@ uses extensions as a fallback if that fails.}
 \label{format}
 \vspace{1mm}
 \begin{center}
-\begin{tabular}{llccc}
-Python Module   & Detector		& Typical extension & Multi-image	& Write\\% & Notes\\
-%\midrule
-\hline % 
-ADSC		&   ADSC Quantum				&	.img	&	$\times$	&	$\surd$		\\%Check\\
-Bruker		&   Bruker formats				&	.sfrm	&	$\times$	&	$\surd$		\\%TODO Complete\\
-DM3			&	Gatan Digital Micrograph	&	.dm3	&	$\times$	&	$\times$	\\%?\\
-EDF		    &   ESRF data format			&	.edf	&	$\surd$		&	$\surd$		\\%Several bit formats\\
-EDNA-XML	& 	Used by EDNA \cite{edna}	&	.xml	&	$\times$	&	$\times$	 \\%Internaly  used in EDNA\\
-CBF		    &   CIF binary files			&	.cbf	&	$\times$ 	& 	$\surd$		\\%Used also by Pilatus \\
-kcd	    	&   Nonius 	KappaCCD			&	.kccd	&	$\times$ 	&	$\times$		\\%Multiples frames are merged are reading. $\times$w bruker\\
-fit2dmask  	&	Used by Fit2D \cite{fit2d}	&   .msk    &   $\times$  &   $\surd$  \\
-fit2dspreadsheet & Used by Fit2D \cite{fit2d} 	&  .spr    &   $\times$  & $\surd$    \\
-GE		    &   General Electric	&	-		&	$\surd$	&	$\times$		\\%massivly multi-frame\\
-HiPiC       & 	Hamamatsu CCD 		&	.tif	&	$\times$	&	$\times$	 	\\%Tiff based format\\
-marccd		&   MarCCD/Mar165		&	.mccd	&	$\times$	&	$\times$		\\%Tiff based format\\
-mar345		&   Mar345 image plate	&	.mar3450		&	$\times$	&	$\surd$		\\%Compressed format\\
-OXD		    &   Oxford Diffraction 	&	.img	&	$\times$	&	$\surd$		\\%$\times$w Agilent\\
-pilatus	    & Dectris Pilatus Tiff	&	.tif	&	$\times$	&	$\times$		\\%Tiff based  format\\
-PNM			&	Portable aNy Map	& .pnm	&	$\times$	&	$\times$		\\% pnm is a unix image format
-TIFF		&	Tagged Image File Format	&	.tif	&	$\times$	&	$\surd$		\\%can be compressed or not\\
+\begin{tabular}{llcccc}
+Python Module   & Detector		& Extension & Read & Multi-image	& Write\\
+\hline 
+ADSC		&   ADSC Quantum				&	.img	&	$\surd$&	-	&	$\surd$		\\
+Bruker		&   Bruker formats				&	.sfrm	&	$\surd$&	-	&	$\surd$		\\
+DM3			&	Gatan Digital Micrograph	&	.dm3	&	$\surd$&	-	&	-	\\
+EDF		    &   ESRF data format			&	.edf	&	$\surd$&	$\surd$		&	$\surd$		\\
+EDNA-XML	& 	Used by EDNA \cite{edna} 	&	.xml	&	$\surd$&	-	&	-	 \\
+CBF		    &   CIF binary files			&	.cbf	&	$\surd$&	- 	& 	$\surd$		\\
+kcd	    	&   Nonius 	KappaCCD			&	.kccd	&	$\surd$&	- 	&	-		\\
+fit2dmask  	&	Used by Fit2D \cite{fit2d}	&   .msk    &	$\surd$&   -  &   $\surd$  \\
+fit2dspreadsheet & Used by Fit2D \cite{fit2d}	&  .spr    &	$\surd$&   -  & $\surd$    \\
+GE		    &   General Electric	&	-		&	$\surd$&	$\surd$	&	-		\\
+HiPiC       & 	Hamamatsu CCD 		&	.tif	&	$\surd$&	-	&	-	 	\\
+marccd		&   MarCCD/Mar165		&	.mccd	&	$\surd$&	-	&	$\surd$		\\
+mar345		&   Mar345 image plate	&	.mar3450		&	$\surd$&	-	&	$\surd$		\\
+OXD		    &   Oxford Diffraction 	&	.img	&	$\surd$&	-	&	$\surd$		\\
+pilatus	    & Dectris Pilatus Tiff	&	.tif	&	$\surd$&	-	&	$\surd$		\\
+PNM			&	Portable aNy Map	& .pnm	&	$\surd$&	-	&	-		\\
+TIFF		&	Tagged Image File Format	&	.tif	&	$\surd$&	-	&	$\surd$		\\
 \end{tabular}
 \end{center}
 \end{table}

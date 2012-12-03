@@ -1,0 +1,59 @@
+Dear Editor,
+
+We would like you to thank you for accepting the revision of our article and
+please find the new version,  containing minor modification, specifying how 
+metadata are managed within the library.
+
+Please find hereafter a detailed answer for the referees:
+
+As mentioned in the introduction of the article, FabIO is a side-product of the 
+author's work on other subject related to the analysis of images coming from
+synchrotrons  and laboratory sources, especially diffraction data and microscopy
+data.   As such FabIO sees new features added when they are needed; this is why
+we have  no plans for a full-release as suggested by Referee #1 . On the other
+hand, we  increment the minor version number to keep track of the changes. A
+comprehensive  test-suite prevents regression between versions. We wish to
+publish this work  even if the version number of Fabio is “only” 0.1, renaming
+it artificially  to 1.0 would have little sense for our user community.
+
+Both referees mentioned concerns about metadata management. We modified the 
+section 2.3 accordingly, but here a more comprehensive answer is given. 
+
+Metadata can be split in three categories: 
+1) metadata related to how image is stored (dimensions, compression, data type, endianness …)
+2) metadata related to the experimental setup (wavelength, goniometer, image orientation)
+3) other metadata like sample description as free-form text.  
+All metadata are stored together in a single python dictionary (img.header)
+which can be modified in place and further written to the disk, if FabIO knows
+how to write this format.  
+
+As metadata from first category are read and interpreted to be able to further
+decode the array on the disk, those metadata are usually re-generated at write
+time in order to ensure the image file freshly written will be readable and
+consistent.   
+
+For metdata of the third type, no translation is usually needed and the only
+problem the user could encounter is if the output format does not allow such 
+“free-type” format (like PNM files for example).  
+
+We believe most concern of the referees are related to the second type of
+metadata as they are essential to interpret the data. In diffraction, such
+metadata refer often to goniometer geometry hence translating such metadata
+would be equivalent to translate any goniometer to any other goniometer with
+possibly a different number of circles !     
+
+The purpose of FabIO is to read data (especially the array) and optionally to
+write them. Translation of format, even if FabIO makes it easier, is not the
+goal of the library and, we believe, is not achievable considering the number of
+image format, the number of goniometer geometries, the various orientation of
+the camera and the versatility of synchrotron beamlines (where setup and
+metadata are likely to change every week).     
+
+Some solution for unifying geometries have been proposed by IUCr with imgCIF;
+but the NeXus committee proposes other conventions and other communities have
+other conventions (CanSAS, electron microscopy, … ). We understand the need of
+scientists aiming at translating image from one format to another; but such a
+“turn-key solution” is impossible to write and we can only provide a tool
+helping them to write this translator. The scientist is the only one knowing all
+the details of the input setup and the output setup, hence the only one able
+write this translator for his specific case.       
