@@ -142,11 +142,13 @@ numeric values.
 
 Information in the header about the binary part of the image (compression,
 endianness, shape) are interpreted however, other other metadata are exposed as
-they are recorded in the file. Where possible, FabIO allows the user to modify
-and save this information.
+they are recorded in the file. FabIO allows the user to modify
+and, where possible, to save this information (Table \ref{format} summarizes
+writable formats).
 Automatic translation between file-formats, even if desirable, is sometimes
-impossible because not all format have the capability ro be extended with
-additionnal metadata. Nevertheless FabIO is capable of converting one
+impossible because not all format have the capability to be extended with
+additionnal metadata. 
+Nevertheless FabIO is capable of converting one
 image data-format into another by taking care of the numerical specifics: 
 for example float arrays are converted to integer arrays if the output format only
 accepts integers.
