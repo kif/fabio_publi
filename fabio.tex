@@ -191,7 +191,7 @@ Opening an image:\\
 \begin{verbatim}
 import fabio     
 im100 = fabio.open('Quartz_0100.tif') # Open image file
-print(im0.data[1024,1024])            # check a pixel value
+print(im0.data[1024,1024])            # Check a pixel value
 im101 = im100.next()                  # Open next image
 im270 = im1.getframe(270)             # Jump to file number 270: Quartz_0270.tif
 \end{verbatim}
@@ -213,9 +213,9 @@ img.write('normed_0001.edf')
 
 Interactive viewing with matplotlib:\\
 \begin{verbatim}
-from matplotlib import pyplot       # load matplotlib 
-pyplot.imshow(img.data)             # display as an image
-pyplot.show()                       # show GUI window
+from matplotlib import pyplot       # Load matplotlib 
+pyplot.imshow(img.data)             # Display as an image
+pyplot.show()                       # Show GUI window
 \end{verbatim}
 
 
