@@ -8,10 +8,10 @@ within the library, as those were the main concerns of the referees.
 Please find hereafter a detailed answer for the referees:
 
 As mentioned in the introduction of the article, FabIO is a side-product of the 
-author's work on other subject related to the analysis of images coming from
+authors' work on other subject related to the analysis of images coming from
 synchrotrons  and laboratory sources, especially diffraction data and microscopy
-data.   As such FabIO sees new features added when they are needed; this is why
-we have  no plans for a full-release as suggested by Referee #1 . On the other
+data. As such FabIO sees new features added when they are needed; this is why
+we have no plans for a full-release as suggested by Referee #1. On the other
 hand, we  increment the minor version number to keep track of the changes. A
 comprehensive  test-suite prevents regression between versions. We wish to
 publish this work  even if the version number of Fabio is “only” 0.1, renaming
@@ -44,15 +44,15 @@ would be equivalent to translate any goniometer to any other goniometer with
 possibly a different number of circles !     
 
 The purpose of FabIO is to read data (especially the array) and optionally to
-write them. Translation of format, even if FabIO makes it easier, is not the
-goal of the library and, we believe, is not achievable considering the number of
-image format, the number of goniometer geometries, the various orientation of
+write them. Translation of formats, even if FabIO makes it easier, is not the
+main goal of the library and, we believe, is not achievable considering the number of
+image formats, the number of goniometer geometries, the various orientation of
 the camera and the versatility of synchrotron beamlines (where setup and
-metadata are likely to change every week).     
+metadata are likely to change every week). 
 
-Some solution for unifying geometries have been proposed by IUCr with imgCIF;
+Some solutions for unifying geometries have been proposed by IUCr with imgCIF;
 but the NeXus committee proposes other conventions and other communities have
-other conventions (CanSAS, electron microscopy, … ). We understand the need of
+yet other conventions (CanSAS, electron microscopy, … ). We understand the need of
 scientists aiming at translating image from one format to another; but such a
 “turn-key solution” is impossible to write and we can only provide a tool
 helping them to write this translator. The scientist is the only one knowing all
