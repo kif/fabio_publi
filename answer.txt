@@ -1,8 +1,9 @@
 Dear Editor,
 
-We would like you to thank you for accepting the revision of our article and
-please find the new version,  containing minor modification, specifying how 
-metadata are managed within the library.
+We would like you to thank you for consdering our article about easy
+access to X-ray images and thanks referees for their work. Please find the
+new version, containing minor modification, specifying how metadata are managed
+within the library, as those were the main concerns of the referees.
 
 Please find hereafter a detailed answer for the referees:
 
