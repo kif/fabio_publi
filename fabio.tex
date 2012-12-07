@@ -34,10 +34,10 @@ A Python module for reading and handling data from two-dimensional X-ray detecto
 \begin{abstract}
 FabIO is a Python module written for easy and transparent reading 
 of raw two-dimensional data from various X-ray detectors. The module provide a
-function reading any image and returning a fabioimage object which 
+function for reading any image and returning a fabioimage object which 
 contains both metadata (header information) and the raw data.
 All fabioimage object offer additional methods to extract
-information about the image and or to open other detector images from
+information about the image and to open other detector images from
 the same data series.
  
 \end{abstract}
@@ -141,13 +141,13 @@ dictionary where keys are strings and values are usually strings or
 numeric values.
 
 Information in the header about the binary part of the image (compression,
-endianness, shape) are interpreted however, other other metadata are exposed as
+endianness, shape) are interpreted however, other metadata are exposed as
 they are recorded in the file. FabIO allows the user to modify
 and, where possible, to save this information (Table \ref{format} summarizes
 writable formats).
 Automatic translation between file-formats, even if desirable, is sometimes
 impossible because not all format have the capability to be extended with
-additionnal metadata. 
+additional metadata. 
 Nevertheless FabIO is capable of converting one
 image data-format into another by taking care of the numerical specifics: 
 for example float arrays are converted to integer arrays if the output format only
@@ -162,15 +162,15 @@ appropriate for specific formats.
 In addition to the header information and image data, every {\em fabioimage}
 instance (returned by {\em fabio.open}) has methods inherited from fabioimage 
 which provide information about the image minimum, maximum and mean values.
-In addition there are methods which returns the file number, name etc. 
+In addition there are methods which return the file number, name etc. 
 Some of the most important methods are specific for certain formats because 
 the methods are related to how frames in a sequence are handled; these methods
 are {\em img.next()}, {\em img.previous()}, and {\em img.getframe(n)}.
 The behaviour of such methods varies depending on the
-image format: if it is single-framed (like mar345),  {\em img.next()} will
-return the image in next file. On multi-frame format (like GE), {\em img.next()}
-will return the next frame within the same file. For formats which are possibly 
-multi-framed like EDF, the behaviour depends on the actual number of  frames per
+image format: for single-frame format (like mar345), {\em img.next()} will
+return the image in next file; for multi-frame format (like GE), {\em
+img.next()} will return the next frame within the same file. For formats which are possibly 
+multi-framed like EDF, the behaviour depends on the actual number of frames per
 file (accessible via the {\em img.nframes} attribute).
 
 
@@ -191,9 +191,9 @@ Opening an image:\\
 \begin{verbatim}
 import fabio     
 im100 = fabio.open('Quartz_0100.tif') # Open image file
-print(im0.data[1024,1024])          # check a pixel value
-im101 = im100.next()                    # Open next image
-im270 = im1.getframe(270)           # Jump to file number
+print(im0.data[1024,1024])            # check a pixel value
+im101 = im100.next()                  # Open next image
+im270 = im1.getframe(270)             # Jump to file number 270: Quartz_0270.tif
 \end{verbatim}
 
 Normalising the intensity to a value in the header:\\
@@ -223,8 +223,9 @@ pyplot.show()                       # show GUI window
 
 The Hierarchical Data Format version 5 \cite{hdf5} is a data format which is
 increasingly popular for storage of X-ray and neutron data. To name a few
-facilities the synchrotron Soleil\cite{tub05} and the neutron sources
-ISIS, SNS and SINQ already use HDF extensively through the NeXus\cite{nexus} format.
+facilities the synchrotron Soleil \cite{tub05} and the neutron sources
+ISIS, SNS and SINQ already use HDF extensively through the NeXus \cite{nexus}
+format.
 For now, mainly processed or curated data are stored in this format but new detectors are
 rumoured to provide native output in HDF5.
 FabIO will rely on H5Py \cite{h5py}, which already
@@ -244,11 +245,11 @@ Python versions.
 
 FabIO gives an easy way to read and write 2D images when using the
 Python computer language.
-It was originally developed for X-ray diffraction but now gives
+It was originally developed for X-ray diffraction data but now gives
 an easy way for scientists to access and manipulate
 their data from a wide range of 2D X-ray detectors.
 We welcome contributions to further improve the code and hope to add
-further file formats in the future as well as port the existing code base 
+more file formats in the future as well as port the existing code base 
 to the emerging Python3.
 
 
@@ -279,7 +280,7 @@ uses extensions as a fallback if that fails.}
 \vspace{1mm}
 \begin{center}
 \begin{tabular}{llcccc}
-Python Module   & Detector		& Extension & Read & Multi-image	& Write\\
+Python Module   & Detector / Format		& Extension & Read & Multi-image	& Write\\
 \hline 
 ADSC		&   ADSC Quantum				&	.img	&	$\surd$&	-	&	$\surd$		\\
 Bruker		&   Bruker formats				&	.sfrm	&	$\surd$&	-	&	$\surd$		\\
